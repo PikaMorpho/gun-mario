@@ -3,7 +3,11 @@
     "description": "",
     "dependencies": {
         "device": "*",
-        "arcade-background-scroll": "github:microsoft/arcade-background-scroll#v0.1.2"
+        "arcade-background-scroll": "github:microsoft/arcade-background-scroll#v0.1.2",
+        "animation": "*",
+        "pxt-status-bar": "github:jwunderl/pxt-status-bar#v0.4.2",
+        "controller": "*",
+        "sprite-scaling": "*"
     },
     "files": [
         "main.blocks",
@@ -11,7 +15,9 @@
         "README.md",
         "assets.json",
         "images.g.jres",
-        "images.g.ts"
+        "images.g.ts",
+        "tilemap.g.jres",
+        "tilemap.g.ts"
     ],
     "testFiles": [
         "test.ts"
