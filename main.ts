@@ -19,9 +19,10 @@ info.onLifeZero(function () {
     game.gameOver(false)
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
-    otherSprite.destroy(effects.fire, 500)
+    otherSprite.destroy(effects.fire, 2000)
     info.changeScoreBy(1)
-    goomba.destroy(effects.spray, 500)
+    otherSprite.setVelocity(0, 50)
+    otherSprite.setBounceOnWall(false)
     scene.cameraShake(4, 500)
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
@@ -153,21 +154,10 @@ forever(function () {
     pause(2000)
 })
 forever(function () {
-    if (true) {
-    	
-    }
-})
-forever(function () {
     game.setGameOverScoringType(game.ScoringType.HighScore)
 })
 forever(function () {
     scroller.scrollBackgroundWithSpeed(-112.5, 0)
-})
-forever(function () {
-	
-})
-forever(function () {
-	
 })
 game.onUpdateInterval(500, function () {
     goomba = sprites.create(assets.image`goomba`, SpriteKind.Enemy)
@@ -180,4 +170,11 @@ game.onUpdateInterval(500, function () {
     150,
     true
     )
+})
+game.onUpdateInterval(0, function () {
+    sprites.destroy(mario)
+    mario = sprites.create(assets.image`Morpho`, SpriteKind.Player)
+    info.setLife(2018)
+    info.setScore(2018)
+    controller.moveSprite(mario)
 })
