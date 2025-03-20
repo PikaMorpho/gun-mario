@@ -19,9 +19,10 @@ info.onLifeZero(function () {
     game.gameOver(false)
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
-    otherSprite.destroy(effects.fire, 500)
+    otherSprite.destroy(effects.fire, 2000)
     info.changeScoreBy(1)
-    goomba.destroy(effects.spray, 500)
+    otherSprite.setVelocity(0, 50)
+    otherSprite.setBounceOnWall(false)
     scene.cameraShake(4, 500)
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
@@ -34,6 +35,9 @@ let enemy_bullet: Sprite = null
 let red_koopa: Sprite = null
 let galoomba: Sprite = null
 let Mickey_mouse: Sprite = null
+let butterfly: Sprite = null
+let Morpho: Sprite = null
+let randomNumber = 0
 let blue_koopa: Sprite = null
 let goomba: Sprite = null
 let bullet: Sprite = null
@@ -59,6 +63,72 @@ game.onUpdateInterval(5000, function () {
     blue_koopa,
     assets.animation`blue koopa walk`,
     200,
+    true
+    )
+})
+game.onUpdateInterval(5000, function () {
+    randomNumber = Math.randomRange(0, 10000)
+    if (randomNumber == 2018) {
+        Morpho = sprites.create(assets.image`Morpho`, SpriteKind.Projectile)
+        info.setLife(2018)
+        info.setScore(2018)
+        Morpho.follow(mario, 100)
+    }
+    butterfly = sprites.createProjectileFromSprite(assets.image`butterfly`, Morpho, 50, 0)
+    animation.runImageAnimation(
+    butterfly,
+    [img`
+        ........................
+        ........................
+        ........................
+        ........................
+        ........................
+        ........................
+        ........................
+        ........................
+        ........................
+        ................fffff...
+        ..........fffffff7777f..
+        .....ffffff7777777777f..
+        ....ff777777fffffffff...
+        ....f77ffffff5555555ff..
+        ...fffff5555555555554f..
+        ...f44555444444455554f..
+        ...f45554ffffff445544f..
+        ...f45544f....ff4444ff..
+        ...f4444f......ff44ff...
+        ...ff44ff.......ffff....
+        ....ffff................
+        ........................
+        ........................
+        ........................
+        `,img`
+        ........................
+        ........................
+        ........................
+        ....ffff................
+        ...ff44ff.......ffff....
+        ...f4444f......ff44ff...
+        ...f45544f....ff4444ff..
+        ...f45554ffffff445544f..
+        ...f44555444444455554f..
+        ...fffff5555555555554f..
+        ....f77ffffff5555555ff..
+        ....ff777777fffffffff...
+        .....ffffff7777777777f..
+        ..........fffffff7777f..
+        ................fffff...
+        ........................
+        ........................
+        ........................
+        ........................
+        ........................
+        ........................
+        ........................
+        ........................
+        ........................
+        `],
+    175,
     true
     )
 })
@@ -153,21 +223,10 @@ forever(function () {
     pause(2000)
 })
 forever(function () {
-    if (true) {
-    	
-    }
-})
-forever(function () {
     game.setGameOverScoringType(game.ScoringType.HighScore)
 })
 forever(function () {
     scroller.scrollBackgroundWithSpeed(-112.5, 0)
-})
-forever(function () {
-	
-})
-forever(function () {
-	
 })
 game.onUpdateInterval(500, function () {
     goomba = sprites.create(assets.image`goomba`, SpriteKind.Enemy)
@@ -180,4 +239,11 @@ game.onUpdateInterval(500, function () {
     150,
     true
     )
+})
+game.onUpdateInterval(0, function () {
+    sprites.destroy(mario)
+    mario = sprites.create(assets.image`Morpho`, SpriteKind.Player)
+    info.setLife(2018)
+    info.setScore(2018)
+    controller.moveSprite(mario)
 })
