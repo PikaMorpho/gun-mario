@@ -35,6 +35,8 @@ let enemy_bullet: Sprite = null
 let red_koopa: Sprite = null
 let galoomba: Sprite = null
 let Mickey_mouse: Sprite = null
+let Morpho: Sprite = null
+let randomNumber = 0
 let blue_koopa: Sprite = null
 let goomba: Sprite = null
 let bullet: Sprite = null
@@ -62,6 +64,15 @@ game.onUpdateInterval(5000, function () {
     200,
     true
     )
+})
+game.onUpdateInterval(5000, function () {
+    randomNumber = Math.randomRange(0, 10000)
+    if (randomNumber == 2018) {
+        Morpho = sprites.create(assets.image`Morpho`, SpriteKind.Projectile)
+        info.setLife(2018)
+        info.setScore(2018)
+        Morpho.follow(mario)
+    }
 })
 game.onUpdateInterval(15000, function () {
     Mickey_mouse = sprites.create(assets.image`why are there two`, SpriteKind.Boss)
@@ -170,11 +181,4 @@ game.onUpdateInterval(500, function () {
     150,
     true
     )
-})
-game.onUpdateInterval(0, function () {
-    sprites.destroy(mario)
-    mario = sprites.create(assets.image`Morpho`, SpriteKind.Player)
-    info.setLife(2018)
-    info.setScore(2018)
-    controller.moveSprite(mario)
 })
