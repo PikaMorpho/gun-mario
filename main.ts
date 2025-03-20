@@ -1,3 +1,8 @@
+enum ActionKind {
+    Walking,
+    Idle,
+    Jumping
+}
 namespace SpriteKind {
     export const Boss = SpriteKind.create()
 }
@@ -30,6 +35,8 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
     scene.cameraShake(4, 500)
     info.changeLifeBy(-1)
 })
+let Butterfly: Sprite = null
+let blue_koopa: Sprite = null
 let koopa: Sprite = null
 let enemy_bullet: Sprite = null
 let red_koopa: Sprite = null
@@ -37,7 +44,6 @@ let galoomba: Sprite = null
 let Mickey_mouse: Sprite = null
 let Morpho: Sprite = null
 let randomNumber = 0
-let blue_koopa: Sprite = null
 let goomba: Sprite = null
 let bullet: Sprite = null
 let luigi: Sprite = null
@@ -53,18 +59,6 @@ assets.animation`mario blink`,
 500,
 true
 )
-game.onUpdateInterval(5000, function () {
-    blue_koopa = sprites.create(assets.image`koopa`, SpriteKind.Enemy)
-    blue_koopa.setPosition(160, randint(0, 115))
-    blue_koopa.setFlag(SpriteFlag.AutoDestroy, true)
-    blue_koopa.follow(mario, 150)
-    animation.runImageAnimation(
-    blue_koopa,
-    assets.animation`blue koopa walk`,
-    200,
-    true
-    )
-})
 game.onUpdateInterval(5000, function () {
     randomNumber = Math.randomRange(0, 10000)
     if (randomNumber == 2018) {
@@ -159,6 +153,19 @@ game.onUpdateInterval(1000, function () {
     )
 })
 forever(function () {
+    pause(5000)
+    blue_koopa = sprites.create(assets.image`koopa`, SpriteKind.Enemy)
+    blue_koopa.setPosition(160, randint(0, 115))
+    blue_koopa.setFlag(SpriteFlag.AutoDestroy, true)
+    blue_koopa.follow(mario, 150)
+    animation.runImageAnimation(
+    blue_koopa,
+    assets.animation`blue koopa walk`,
+    200,
+    true
+    )
+})
+forever(function () {
     bullet = sprites.createProjectileFromSprite(assets.image`luigi bullet up`, luigi, 100, -100)
     bullet = sprites.createProjectileFromSprite(assets.image`luigi bullet`, luigi, 100, 0)
     bullet = sprites.createProjectileFromSprite(assets.image`luigi bullet down`, luigi, 100, 100)
@@ -169,6 +176,16 @@ forever(function () {
 })
 forever(function () {
     scroller.scrollBackgroundWithSpeed(-112.5, 0)
+})
+forever(function () {
+    Butterfly = sprites.createProjectileFromSprite(assets.image`Butterfly`, Morpho, 50, 0)
+    animation.runImageAnimation(
+    Butterfly,
+    assets.animation`butter fly`,
+    150,
+    true
+    )
+    pause(5000)
 })
 game.onUpdateInterval(500, function () {
     goomba = sprites.create(assets.image`goomba`, SpriteKind.Enemy)
