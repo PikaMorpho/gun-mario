@@ -8,10 +8,12 @@ namespace SpriteKind {
     export const Morpho = SpriteKind.create()
     export const Mickey = SpriteKind.create()
     export const BossProjectile = SpriteKind.create()
+    export const Turret = SpriteKind.create()
 }
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     sprites.destroy(luigi, effects.disintegrate, 1000)
     luigi = sprites.createProjectileFromSprite(assets.image`luigi`, mario, 0, 0)
+    luigi.setKind(SpriteKind.Turret)
     animation.runImageAnimation(
     luigi,
     assets.animation`luigi blink`,
@@ -187,13 +189,10 @@ info.onLifeZero(function () {
     mario.destroy(effects.halo, 1000)
     game.gameOver(false)
 })
-sprites.onCreated(SpriteKind.EX, function (sprite) {
-    EX_Bullet = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, -50, 50)
-    EX_Bullet_2 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, -50, 0)
-    EX_Bullet_3 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, -50, -50)
-    EX_Bullet.setKind(SpriteKind.BossProjectile)
-    EX_Bullet_2.setKind(SpriteKind.BossProjectile)
-    EX_Bullet_3.setKind(SpriteKind.BossProjectile)
+sprites.onOverlap(SpriteKind.Turret, SpriteKind.BossProjectile, function (sprite, otherSprite) {
+    sprite.destroy(effects.ashes, 500)
+    otherSprite.destroy(effects.ashes, 500)
+    scene.cameraShake(4, 500)
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     otherSprite.destroy(effects.fire, 2000)
@@ -208,17 +207,18 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
     info.changeLifeBy(-1)
 })
 let goomba: Sprite = null
+let morphospawnchecker: Sprite = null
+let EX_Bullet_3: Sprite = null
+let EX_Bullet_2: Sprite = null
+let Morpho2: Sprite = null
 let Butterfly: Sprite = null
 let blue_koopa: Sprite = null
 let koopa: Sprite = null
 let enemy_bullet: Sprite = null
 let red_koopa: Sprite = null
 let galoomba: Sprite = null
-let Mickey_mouse: Sprite = null
-let Morpho2: Sprite = null
 let randomNumber = 0
-let EX_Bullet_3: Sprite = null
-let EX_Bullet_2: Sprite = null
+let Mickey_mouse: Sprite = null
 let bullet: Sprite = null
 let EX_Bullet: Sprite = null
 let bossHealth = 0
@@ -236,19 +236,13 @@ assets.animation`mario blink`,
 500,
 true
 )
-game.onUpdateInterval(5000, function () {
-    randomNumber = Math.randomRange(0, 5000)
-    if (randomNumber == 2018) {
-        Morpho2 = sprites.create(assets.image`Morpho`, SpriteKind.Morpho)
-        info.setLife(2018)
-        info.setScore(2018)
-        Morpho2.follow(mario)
-    }
-})
 game.onUpdateInterval(15000, function () {
     Mickey_mouse = sprites.create(assets.image`why are there two`, SpriteKind.Mickey)
     Mickey_mouse.setPosition(0, randint(0, 115))
     Mickey_mouse.setVelocity(50, 0)
+})
+game.onUpdateInterval(2500, function () {
+    randomNumber = Math.randomRange(0, 2500)
 })
 game.onUpdateInterval(2500, function () {
     galoomba = sprites.create(assets.image`galoomba`, SpriteKind.Enemy)
@@ -360,14 +354,68 @@ forever(function () {
     scroller.scrollBackgroundWithSpeed(-112.5, 0)
 })
 forever(function () {
-    Butterfly = sprites.createProjectileFromSprite(assets.image`Butterfly`, Morpho2, 50, 0)
-    animation.runImageAnimation(
-    Butterfly,
-    assets.animation`butter fly`,
-    150,
-    true
-    )
+    if (randomNumber == 2018) {
+        Butterfly = sprites.createProjectileFromSprite(assets.image`Butterfly`, Morpho2, 50, 0)
+        animation.runImageAnimation(
+        Butterfly,
+        assets.animation`butter fly`,
+        150,
+        true
+        )
+        pause(2000)
+    }
+})
+forever(function () {
+    if (randomNumber == 2018) {
+        EX_Bullet = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, -50, 50)
+        EX_Bullet_2 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, -50, 0)
+        EX_Bullet_3 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, -50, -50)
+        EX_Bullet.setKind(SpriteKind.BossProjectile)
+        EX_Bullet_2.setKind(SpriteKind.BossProjectile)
+        EX_Bullet_3.setKind(SpriteKind.BossProjectile)
+        pause(1000)
+    }
+})
+forever(function () {
+    if (randomNumber != 2018) {
+        morphospawnchecker = sprites.create(img`
+            .......22.222..2........
+            .......22.222..2........
+            ..222222222222222222....
+            ..222222222222222222....
+            222244444444444444442...
+            22224555555555544444422.
+            22224555555555544444422.
+            ..224445511115554444422.
+            ..224445511115554444422.
+            ..222444411111115544222.
+            ..222444411111115544222.
+            ..222444451111115544422.
+            ..222224455551155544422.
+            ..222224455551155544422.
+            ..222224455555544444422.
+            ..222224455555544444422.
+            ..222224455555544444422.
+            ....22222455555444222222
+            ....2222244444422222222.
+            ....2222244444422222222.
+            .......2244444422222....
+            .......22222222.........
+            .......22222222.........
+            .........2..............
+            `, SpriteKind.Projectile)
+    }
     pause(5000)
+})
+forever(function () {
+    if (randomNumber == 2018) {
+        pause(1000)
+        Morpho2 = sprites.create(assets.image`Morpho`, SpriteKind.Morpho)
+        info.setLife(2018)
+        info.setScore(2018)
+        Morpho2.follow(mario)
+        pause(10000000000000000)
+    }
 })
 game.onUpdateInterval(500, function () {
     goomba = sprites.create(assets.image`goomba`, SpriteKind.Enemy)

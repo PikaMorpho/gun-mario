@@ -17,13 +17,14 @@
         "images.g.jres",
         "images.g.ts",
         "tilemap.g.jres",
-        "tilemap.g.ts"
+        "tilemap.g.ts",
+        "main.py"
     ],
     "testFiles": [
         "test.ts"
     ],
     "targetVersions": {
-        "target": "2.0.40",
+        "target": "2.0.46",
         "targetId": "arcade"
     },
     "supportedTargets": [
