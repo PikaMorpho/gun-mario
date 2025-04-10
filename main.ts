@@ -24,7 +24,7 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
 sprites.onCreated(SpriteKind.Morpho, function (sprite) {
     EX = sprites.create(assets.image`EX`, SpriteKind.EX)
     EX.setPosition(140, 55)
-    bossHealth = 100
+    EX_Health = 2000
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.BossProjectile, function (sprite, otherSprite) {
     EX_Bullet.destroy(effects.ashes, 500)
@@ -34,6 +34,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.BossProjectile, function (sprite
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.EX, function (sprite, otherSprite) {
     sprite.destroy(effects.disintegrate, 500)
     info.changeScoreBy(1)
+    EX_Health += -1
     scene.cameraShake(4, 500)
     animation.runImageAnimation(
     EX,
@@ -181,6 +182,7 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.EX, function (sprite, otherS
     500,
     false
     )
+    pause(5000)
 })
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     bullet = sprites.createProjectileFromSprite(assets.image`mario bullet`, mario, 200, 0)
@@ -200,19 +202,20 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, oth
     otherSprite.setVelocity(0, 50)
     otherSprite.setBounceOnWall(false)
     scene.cameraShake(4, 500)
+    pause(5000)
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     otherSprite.destroy(effects.fire, 500)
     scene.cameraShake(4, 500)
     info.changeLifeBy(-1)
+    pause(5000)
 })
 let goomba: Sprite = null
-let morphospawnchecker: Sprite = null
-let EX_Bullet_3: Sprite = null
-let EX_Bullet_2: Sprite = null
 let Morpho2: Sprite = null
 let Butterfly: Sprite = null
 let blue_koopa: Sprite = null
+let EX_Bullet_3: Sprite = null
+let EX_Bullet_2: Sprite = null
 let koopa: Sprite = null
 let enemy_bullet: Sprite = null
 let red_koopa: Sprite = null
@@ -221,7 +224,7 @@ let randomNumber = 0
 let Mickey_mouse: Sprite = null
 let bullet: Sprite = null
 let EX_Bullet: Sprite = null
-let bossHealth = 0
+let EX_Health = 0
 let EX: Sprite = null
 let luigi: Sprite = null
 let mario: Sprite = null
@@ -242,7 +245,12 @@ game.onUpdateInterval(15000, function () {
     Mickey_mouse.setVelocity(50, 0)
 })
 game.onUpdateInterval(2500, function () {
-    randomNumber = Math.randomRange(0, 2500)
+    randomNumber = 2018
+    if (randomNumber != 2018) {
+        pause(5000)
+        randomNumber = Math.randomRange(0, 2500)
+        pause(10000000000000000)
+    }
 })
 game.onUpdateInterval(2500, function () {
     galoomba = sprites.create(assets.image`galoomba`, SpriteKind.Enemy)
@@ -324,6 +332,22 @@ game.onUpdateInterval(1000, function () {
     )
 })
 forever(function () {
+    if (randomNumber == 2018) {
+        EX_Bullet = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, -50, 50)
+        EX_Bullet_2 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, -50, 0)
+        EX_Bullet_3 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, -50, -50)
+        EX_Bullet.setKind(SpriteKind.BossProjectile)
+        EX_Bullet_2.setKind(SpriteKind.BossProjectile)
+        EX_Bullet_3.setKind(SpriteKind.BossProjectile)
+        pause(1500)
+        EX_Bullet = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, -50, -25)
+        EX_Bullet_2 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, -50, 25)
+        EX_Bullet.setKind(SpriteKind.BossProjectile)
+        EX_Bullet_2.setKind(SpriteKind.BossProjectile)
+        pause(1500)
+    }
+})
+forever(function () {
     pause(5000)
     blue_koopa = sprites.create(assets.image`koopa`, SpriteKind.Enemy)
     blue_koopa.setPosition(160, randint(0, 115))
@@ -343,14 +367,6 @@ forever(function () {
     pause(2000)
 })
 forever(function () {
-    if (true) {
-    	
-    }
-})
-forever(function () {
-    game.setGameOverScoringType(game.ScoringType.HighScore)
-})
-forever(function () {
     scroller.scrollBackgroundWithSpeed(-112.5, 0)
 })
 forever(function () {
@@ -367,45 +383,23 @@ forever(function () {
 })
 forever(function () {
     if (randomNumber == 2018) {
-        EX_Bullet = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, -50, 50)
-        EX_Bullet_2 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, -50, 0)
-        EX_Bullet_3 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, -50, -50)
-        EX_Bullet.setKind(SpriteKind.BossProjectile)
-        EX_Bullet_2.setKind(SpriteKind.BossProjectile)
-        EX_Bullet_3.setKind(SpriteKind.BossProjectile)
-        pause(1000)
+        randomNumber = 2017
+        pause(10000000000000000)
     }
 })
 forever(function () {
-    if (randomNumber != 2018) {
-        morphospawnchecker = sprites.create(img`
-            .......22.222..2........
-            .......22.222..2........
-            ..222222222222222222....
-            ..222222222222222222....
-            222244444444444444442...
-            22224555555555544444422.
-            22224555555555544444422.
-            ..224445511115554444422.
-            ..224445511115554444422.
-            ..222444411111115544222.
-            ..222444411111115544222.
-            ..222444451111115544422.
-            ..222224455551155544422.
-            ..222224455551155544422.
-            ..222224455555544444422.
-            ..222224455555544444422.
-            ..222224455555544444422.
-            ....22222455555444222222
-            ....2222244444422222222.
-            ....2222244444422222222.
-            .......2244444422222....
-            .......22222222.........
-            .......22222222.........
-            .........2..............
-            `, SpriteKind.Projectile)
+	
+})
+forever(function () {
+    if (true) {
+    	
     }
-    pause(5000)
+})
+forever(function () {
+    game.setGameOverScoringType(game.ScoringType.HighScore)
+})
+forever(function () {
+	
 })
 forever(function () {
     if (randomNumber == 2018) {
