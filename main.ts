@@ -24,10 +24,9 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
 sprites.onCreated(SpriteKind.Morpho, function (sprite) {
     EX = sprites.create(assets.image`EX`, SpriteKind.EX)
     EX.setPosition(140, 55)
-    EX_Health = 2000
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.BossProjectile, function (sprite, otherSprite) {
-    EX_Bullet.destroy(effects.ashes, 500)
+    EX_Bullet_1.destroy(effects.ashes, 500)
     scene.cameraShake(4, 500)
     info.changeLifeBy(-1)
 })
@@ -223,11 +222,11 @@ let galoomba: Sprite = null
 let randomNumber = 0
 let Mickey_mouse: Sprite = null
 let bullet: Sprite = null
-let EX_Bullet: Sprite = null
-let EX_Health = 0
+let EX_Bullet_1: Sprite = null
 let EX: Sprite = null
 let luigi: Sprite = null
 let mario: Sprite = null
+let EX_Health = 2000
 mario = sprites.create(assets.image`mario`, SpriteKind.Player)
 controller.moveSprite(mario, 200, 200)
 mario.setStayInScreen(true)
@@ -332,19 +331,39 @@ game.onUpdateInterval(1000, function () {
     )
 })
 forever(function () {
+    if (EX_Health <= 1999) {
+        EX.setPosition(76, 55)
+        EX_Bullet_1 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, -50, 50)
+        EX_Bullet_1 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, -50, 0)
+        EX_Bullet_1 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, -50, -50)
+        EX_Bullet_1 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, 50, -50)
+        EX_Bullet_1 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, 50, 50)
+        EX_Bullet_1 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, 50, 0)
+        EX_Bullet_1 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, 0, 50)
+        EX_Bullet_1 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, 0, -50)
+        EX_Bullet_1 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, 0, -50)
+        EX_Bullet_1 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, 0, -50)
+        EX_Bullet_1.setKind(SpriteKind.BossProjectile)
+        pause(2000)
+    }
+})
+forever(function () {
     if (randomNumber == 2018) {
-        EX_Bullet = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, -50, 50)
+        if (EX_Health <= 1999) {
+            pause(10000000000000000)
+        }
+        EX_Bullet_1 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, -50, 50)
         EX_Bullet_2 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, -50, 0)
         EX_Bullet_3 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, -50, -50)
-        EX_Bullet.setKind(SpriteKind.BossProjectile)
+        EX_Bullet_1.setKind(SpriteKind.BossProjectile)
         EX_Bullet_2.setKind(SpriteKind.BossProjectile)
         EX_Bullet_3.setKind(SpriteKind.BossProjectile)
-        pause(1500)
-        EX_Bullet = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, -50, -25)
+        pause(500)
+        EX_Bullet_1 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, -50, -25)
         EX_Bullet_2 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, -50, 25)
-        EX_Bullet.setKind(SpriteKind.BossProjectile)
+        EX_Bullet_1.setKind(SpriteKind.BossProjectile)
         EX_Bullet_2.setKind(SpriteKind.BossProjectile)
-        pause(1500)
+        pause(750)
     }
 })
 forever(function () {
@@ -386,20 +405,6 @@ forever(function () {
         randomNumber = 2017
         pause(10000000000000000)
     }
-})
-forever(function () {
-	
-})
-forever(function () {
-    if (true) {
-    	
-    }
-})
-forever(function () {
-    game.setGameOverScoringType(game.ScoringType.HighScore)
-})
-forever(function () {
-	
 })
 forever(function () {
     if (randomNumber == 2018) {
