@@ -213,6 +213,13 @@ let goomba: Sprite = null
 let Morpho2: Sprite = null
 let Butterfly: Sprite = null
 let blue_koopa: Sprite = null
+let EX_Bullet_10: Sprite = null
+let EX_Bullet_9: Sprite = null
+let EX_Bullet_8: Sprite = null
+let EX_Bullet_7: Sprite = null
+let EX_Bullet_6: Sprite = null
+let EX_Bullet_5: Sprite = null
+let EX_Bullet_4: Sprite = null
 let EX_Bullet_3: Sprite = null
 let EX_Bullet_2: Sprite = null
 let koopa: Sprite = null
@@ -332,18 +339,27 @@ game.onUpdateInterval(1000, function () {
 })
 forever(function () {
     if (EX_Health <= 1999) {
-        EX.setPosition(76, 55)
+        EX.setPosition(75, 55)
         EX_Bullet_1 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, -50, 50)
-        EX_Bullet_1 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, -50, 0)
-        EX_Bullet_1 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, -50, -50)
-        EX_Bullet_1 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, 50, -50)
-        EX_Bullet_1 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, 50, 50)
-        EX_Bullet_1 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, 50, 0)
-        EX_Bullet_1 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, 0, 50)
-        EX_Bullet_1 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, 0, -50)
-        EX_Bullet_1 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, 0, -50)
-        EX_Bullet_1 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, 0, -50)
+        EX_Bullet_2 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, -50, 0)
+        EX_Bullet_3 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, -50, -50)
+        EX_Bullet_4 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, 50, -50)
+        EX_Bullet_5 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, 50, 50)
+        EX_Bullet_6 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, 50, 0)
+        EX_Bullet_7 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, 0, 50)
+        EX_Bullet_8 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, 0, -50)
+        EX_Bullet_9 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, 0, -50)
+        EX_Bullet_10 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, 0, -50)
         EX_Bullet_1.setKind(SpriteKind.BossProjectile)
+        EX_Bullet_2.setKind(SpriteKind.BossProjectile)
+        EX_Bullet_3.setKind(SpriteKind.BossProjectile)
+        EX_Bullet_4.setKind(SpriteKind.BossProjectile)
+        EX_Bullet_5.setKind(SpriteKind.BossProjectile)
+        EX_Bullet_6.setKind(SpriteKind.BossProjectile)
+        EX_Bullet_7.setKind(SpriteKind.BossProjectile)
+        EX_Bullet_8.setKind(SpriteKind.BossProjectile)
+        EX_Bullet_9.setKind(SpriteKind.BossProjectile)
+        EX_Bullet_10.setKind(SpriteKind.BossProjectile)
         pause(2000)
     }
 })
