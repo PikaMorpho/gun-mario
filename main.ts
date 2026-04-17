@@ -20,6 +20,11 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     500,
     true
     )
+    if (info.score() >= 20) {
+        sprites.destroy(minniemouse, effects.disintegrate, 1000)
+        minniemouse = sprites.createProjectileFromSprite(assets.image`Minnie Mouse`, mario, 25, 0)
+        minniemouse.setKind(SpriteKind.Turret)
+    }
 })
 sprites.onCreated(SpriteKind.Morpho, function (sprite) {
     EX = sprites.create(assets.image`EX`, SpriteKind.EX)
@@ -196,12 +201,10 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
         bullet = sprites.createProjectileFromSprite(assets.image`mario bullet`, mario, 400, -40)
     }
     if (info.score() >= 10) {
-        bullet = sprites.createProjectileFromSprite(assets.image`mario bullet`, mario, 200, 30)
-        bullet = sprites.createProjectileFromSprite(assets.image`mario bullet`, mario, 200, -30)
+        bullet = sprites.createProjectileFromSprite(assets.image`Big Bullet`, mario, 100, 0)
     }
     if (info.score() >= 20) {
-        bullethome = sprites.createProjectileFromSprite(assets.image`mario bullet`, mario, 200, 30)
-        bullethome = sprites.createProjectileFromSprite(assets.image`mario bullet`, mario, 200, -30)
+    	
     }
     if (info.score() >= 50) {
         bullet = sprites.createProjectileFromSprite(assets.image`mario bullet`, mario, 200, 30)
@@ -234,6 +237,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
 let goomba: Sprite = null
 let Morpho2: Sprite = null
 let Butterfly: Sprite = null
+let MorphoTrigger = 0
 let blue_koopa: Sprite = null
 let EX_Bullet_10: Sprite = null
 let EX_Bullet_9: Sprite = null
@@ -245,16 +249,14 @@ let EX_Bullet_4: Sprite = null
 let EX_Bullet_3: Sprite = null
 let EX_Bullet_2: Sprite = null
 let koopa: Sprite = null
-let MorphoTrigger = 0
-let randomNumber = 0
-let enemy_bullet: Sprite = null
 let red_koopa: Sprite = null
 let galoomba: Sprite = null
+let enemy_bullet: Sprite = null
 let Mickey_mouse: Sprite = null
-let bullethome: Sprite = null
 let bullet: Sprite = null
 let EX_Bullet_1: Sprite = null
 let EX: Sprite = null
+let minniemouse: Sprite = null
 let luigi: Sprite = null
 let mario: Sprite = null
 let EX_Health = 2000
@@ -273,6 +275,12 @@ game.onUpdateInterval(15000, function () {
     Mickey_mouse = sprites.create(assets.image`why are there two`, SpriteKind.Mickey)
     Mickey_mouse.setPosition(0, randint(0, 115))
     Mickey_mouse.setVelocity(50, 0)
+})
+game.onUpdateInterval(375, function () {
+    enemy_bullet = sprites.createProjectileFromSprite(assets.image`mickey bullet right`, minniemouse, 150, 0)
+    enemy_bullet = sprites.createProjectileFromSprite(assets.image`mickey bullet left`, minniemouse, -150, 0)
+    enemy_bullet = sprites.createProjectileFromSprite(assets.image`mickey bullet down`, minniemouse, 0, 150)
+    enemy_bullet = sprites.createProjectileFromSprite(assets.image`mickey bullet up`, minniemouse, 0, -150)
 })
 game.onUpdateInterval(2500, function () {
 	
@@ -344,11 +352,9 @@ game.onUpdateInterval(1000, function () {
     enemy_bullet = sprites.createProjectileFromSprite(assets.image`mickey bullet down`, Mickey_mouse, 0, 100)
     enemy_bullet = sprites.createProjectileFromSprite(assets.image`mickey bullet up`, Mickey_mouse, 0, -100)
 })
+// MORPHO SPAWNER DOES NOT WORK, PLS FIX
 game.onUpdateInterval(1000, function () {
-    randomNumber += 1
-    if (randomNumber >= 90000) {
-        MorphoTrigger = 1
-    }
+	
 })
 game.onUpdateInterval(1000, function () {
     koopa = sprites.create(assets.image`koopa`, SpriteKind.Enemy)
@@ -363,7 +369,10 @@ game.onUpdateInterval(1000, function () {
     )
 })
 forever(function () {
-    if (EX_Health <= 1999) {
+    if (EX_Health >= 1999) {
+        pause(10000000000000000)
+    }
+    if (EX_Health < 1999) {
         EX.setPosition(75, 55)
         EX_Bullet_1 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, -50, 50)
         EX_Bullet_2 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, -50, 0)
@@ -389,10 +398,10 @@ forever(function () {
     }
 })
 forever(function () {
-    if (randomNumber == 2018) {
-        if (EX_Health <= 1999) {
-            pause(10000000000000000)
-        }
+    if (EX_Health >= 1999) {
+        pause(10000000000000000)
+    }
+    if (EX_Health < 1999) {
         EX_Bullet_1 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, -50, 50)
         EX_Bullet_2 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, -50, 0)
         EX_Bullet_3 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, -50, -50)
@@ -450,8 +459,6 @@ forever(function () {
     if (MorphoTrigger == 1) {
         pause(1000)
         Morpho2 = sprites.create(assets.image`Morpho`, SpriteKind.Morpho)
-        info.setLife(2018)
-        info.setScore(2018)
         Morpho2.follow(mario)
         pause(100000000000000000)
     }
