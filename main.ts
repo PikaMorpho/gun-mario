@@ -32,6 +32,15 @@ sprites.onCreated(SpriteKind.Morpho, function (sprite) {
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.BossProjectile, function (sprite, otherSprite) {
     EX_Bullet_1.destroy(effects.ashes, 500)
+    EX_Bullet_2.destroy(effects.ashes, 500)
+    EX_Bullet_3.destroy(effects.ashes, 500)
+    EX_Bullet_4.destroy(effects.ashes, 500)
+    EX_Bullet_5.destroy(effects.ashes, 500)
+    EX_Bullet_6.destroy(effects.ashes, 500)
+    EX_Bullet_7.destroy(effects.ashes, 500)
+    EX_Bullet_8.destroy(effects.ashes, 500)
+    EX_Bullet_9.destroy(effects.ashes, 500)
+    EX_Bullet_10.destroy(effects.ashes, 500)
     scene.cameraShake(4, 500)
     info.changeLifeBy(-1)
 })
@@ -211,6 +220,14 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
         bullet = sprites.createProjectileFromSprite(assets.image`mario bullet`, mario, 200, -30)
     }
 })
+sprites.onOverlap(SpriteKind.Mickey, SpriteKind.Enemy, function (sprite, otherSprite) {
+    sprites.destroy(otherSprite, effects.fire, 2000)
+    info.changeScoreBy(1)
+    otherSprite.setVelocity(0, 50)
+    otherSprite.setBounceOnWall(false)
+    scene.cameraShake(4, 500)
+    pause(5000)
+})
 info.onLifeZero(function () {
     mario.destroy(effects.halo, 1000)
     game.gameOver(false)
@@ -235,10 +252,18 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
     pause(5000)
 })
 let goomba: Sprite = null
+let Paragoomba: Sprite = null
+let enemy_bullet: Sprite = null
 let Morpho2: Sprite = null
 let Butterfly: Sprite = null
 let MorphoTrigger = 0
 let blue_koopa: Sprite = null
+let koopa: Sprite = null
+let Timer = 0
+let red_koopa: Sprite = null
+let galoomba: Sprite = null
+let Mickey_mouse: Sprite = null
+let bullet: Sprite = null
 let EX_Bullet_10: Sprite = null
 let EX_Bullet_9: Sprite = null
 let EX_Bullet_8: Sprite = null
@@ -248,12 +273,6 @@ let EX_Bullet_5: Sprite = null
 let EX_Bullet_4: Sprite = null
 let EX_Bullet_3: Sprite = null
 let EX_Bullet_2: Sprite = null
-let koopa: Sprite = null
-let enemy_bullet: Sprite = null
-let red_koopa: Sprite = null
-let galoomba: Sprite = null
-let Mickey_mouse: Sprite = null
-let bullet: Sprite = null
 let EX_Bullet_1: Sprite = null
 let EX: Sprite = null
 let minniemouse: Sprite = null
@@ -344,10 +363,7 @@ game.onUpdateInterval(2000, function () {
     )
 })
 game.onUpdateInterval(1000, function () {
-    enemy_bullet = sprites.createProjectileFromSprite(assets.image`mickey bullet right`, Mickey_mouse, 125, 0)
-    enemy_bullet = sprites.createProjectileFromSprite(assets.image`mickey bullet left`, Mickey_mouse, -100, 0)
-    enemy_bullet = sprites.createProjectileFromSprite(assets.image`mickey bullet down`, Mickey_mouse, 0, 100)
-    enemy_bullet = sprites.createProjectileFromSprite(assets.image`mickey bullet up`, Mickey_mouse, 0, -100)
+    Timer += 1
 })
 // MORPHO SPAWNER DOES NOT WORK, PLS FIX
 game.onUpdateInterval(1000, function () {
@@ -366,9 +382,6 @@ game.onUpdateInterval(1000, function () {
     )
 })
 forever(function () {
-    if (EX_Health >= 1999) {
-        pause(10000000000000000)
-    }
     if (EX_Health < 1999) {
         EX.setPosition(75, 55)
         EX_Bullet_1 = sprites.createProjectileFromSprite(assets.image`EX Attack`, EX, -50, 50)
@@ -392,6 +405,9 @@ forever(function () {
         EX_Bullet_9.setKind(SpriteKind.BossProjectile)
         EX_Bullet_10.setKind(SpriteKind.BossProjectile)
         pause(2000)
+    }
+    if (EX_Health >= 1999) {
+        pause(10000000000000000)
     }
 })
 forever(function () {
@@ -463,11 +479,30 @@ forever(function () {
     }
 })
 forever(function () {
+    if (info.score() < 10) {
+        pause(1000)
+    }
+    if (info.score() >= 10) {
+        pause(250)
+    }
+    enemy_bullet = sprites.createProjectileFromSprite(assets.image`mickey bullet right`, Mickey_mouse, 125, 0)
+    enemy_bullet = sprites.createProjectileFromSprite(assets.image`mickey bullet left`, Mickey_mouse, -100, 0)
+    enemy_bullet = sprites.createProjectileFromSprite(assets.image`mickey bullet down`, Mickey_mouse, 0, 100)
+    enemy_bullet = sprites.createProjectileFromSprite(assets.image`mickey bullet up`, Mickey_mouse, 0, -100)
+})
+forever(function () {
     if (MorphoTrigger == 1) {
         pause(1000)
         Morpho2 = sprites.create(assets.image`Morpho`, SpriteKind.Morpho)
         Morpho2.follow(mario)
         pause(100000000000000000)
+    }
+})
+forever(function () {
+    if (Timer >= 5) {
+        Paragoomba = sprites.create(assets.image`Paragoomba`, SpriteKind.Enemy)
+        Paragoomba.setPosition(133, 16)
+        pause(4500)
     }
 })
 forever(function () {
