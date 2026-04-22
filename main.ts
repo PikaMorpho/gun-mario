@@ -249,9 +249,9 @@ let EX_Bullet_4: Sprite = null
 let EX_Bullet_3: Sprite = null
 let EX_Bullet_2: Sprite = null
 let koopa: Sprite = null
+let enemy_bullet: Sprite = null
 let red_koopa: Sprite = null
 let galoomba: Sprite = null
-let enemy_bullet: Sprite = null
 let Mickey_mouse: Sprite = null
 let bullet: Sprite = null
 let EX_Bullet_1: Sprite = null
@@ -277,10 +277,7 @@ game.onUpdateInterval(15000, function () {
     Mickey_mouse.setVelocity(50, 0)
 })
 game.onUpdateInterval(375, function () {
-    enemy_bullet = sprites.createProjectileFromSprite(assets.image`mickey bullet right`, minniemouse, 150, 0)
-    enemy_bullet = sprites.createProjectileFromSprite(assets.image`mickey bullet left`, minniemouse, -150, 0)
-    enemy_bullet = sprites.createProjectileFromSprite(assets.image`mickey bullet down`, minniemouse, 0, 150)
-    enemy_bullet = sprites.createProjectileFromSprite(assets.image`mickey bullet up`, minniemouse, 0, -150)
+	
 })
 game.onUpdateInterval(2500, function () {
 	
@@ -430,12 +427,6 @@ forever(function () {
     )
 })
 forever(function () {
-    bullet = sprites.createProjectileFromSprite(assets.image`luigi bullet up`, luigi, 100, -100)
-    bullet = sprites.createProjectileFromSprite(assets.image`luigi bullet`, luigi, 100, 0)
-    bullet = sprites.createProjectileFromSprite(assets.image`luigi bullet down`, luigi, 100, 100)
-    pause(2000)
-})
-forever(function () {
     scroller.scrollBackgroundWithSpeed(-112.5, 0)
 })
 forever(function () {
@@ -451,6 +442,22 @@ forever(function () {
     }
 })
 forever(function () {
+    if (info.score() < 40) {
+        pause(375)
+    }
+    enemy_bullet = sprites.createProjectileFromSprite(assets.image`mickey bullet right`, minniemouse, 150, 0)
+    enemy_bullet = sprites.createProjectileFromSprite(assets.image`mickey bullet left`, minniemouse, -150, 0)
+    enemy_bullet = sprites.createProjectileFromSprite(assets.image`mickey bullet down`, minniemouse, 0, 150)
+    enemy_bullet = sprites.createProjectileFromSprite(assets.image`mickey bullet up`, minniemouse, 0, -150)
+    if (info.score() >= 40) {
+        pause(187.5)
+        enemy_bullet = sprites.createProjectileFromSprite(assets.image`mickey bullet right`, minniemouse, 150, 0)
+        enemy_bullet = sprites.createProjectileFromSprite(assets.image`mickey bullet right`, minniemouse, 150, 0)
+        enemy_bullet = sprites.createProjectileFromSprite(assets.image`mickey bullet down`, minniemouse, 0, 150)
+        enemy_bullet = sprites.createProjectileFromSprite(assets.image`mickey bullet up`, minniemouse, 0, -150)
+    }
+})
+forever(function () {
     if (true) {
     	
     }
@@ -461,6 +468,33 @@ forever(function () {
         Morpho2 = sprites.create(assets.image`Morpho`, SpriteKind.Morpho)
         Morpho2.follow(mario)
         pause(100000000000000000)
+    }
+})
+forever(function () {
+    if (info.score() >= 60) {
+        sprites.destroy(minniemouse, effects.disintegrate, 1000)
+        minniemouse = sprites.createProjectileFromSprite(assets.image`Minnie Mouse`, luigi, 25, 0)
+        minniemouse.setKind(SpriteKind.Turret)
+        pause(7500)
+    }
+})
+forever(function () {
+    bullet = sprites.createProjectileFromSprite(assets.image`luigi bullet up`, luigi, 100, -100)
+    bullet = sprites.createProjectileFromSprite(assets.image`luigi bullet`, luigi, 100, 0)
+    bullet = sprites.createProjectileFromSprite(assets.image`luigi bullet down`, luigi, 100, 100)
+    if (info.score() >= 1.5) {
+        bullet = sprites.createProjectileFromSprite(assets.image`luigi bullet down`, luigi, 100, 50)
+        bullet = sprites.createProjectileFromSprite(assets.image`luigi bullet up`, luigi, 100, -50)
+    }
+    if (info.score() >= 4.5) {
+        if (info.score() < 18) {
+            pause(1000)
+        }
+    } else {
+        pause(2000)
+    }
+    if (info.score() >= 18) {
+        pause(375)
     }
 })
 game.onUpdateInterval(500, function () {
