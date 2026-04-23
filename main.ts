@@ -543,8 +543,8 @@ forever(function () {
     }
 })
 forever(function () {
-    Paragoomba_Spawn_Decider = randint(1, 2)
     pause(4500)
+    Paragoomba_Spawn_Decider = randint(1, 2)
 })
 forever(function () {
     if (Paragoomba_Health <= 0) {
