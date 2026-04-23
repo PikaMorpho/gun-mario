@@ -398,26 +398,6 @@ namespace myImages {
 ....................
 ....................
 `;
-            case "CDzdBqw0d|Y0=-6XpNe=":
-            case "goomba":return img`
-. . . . . . . . . . . . . . . . 
-. . . . . . e e e e . . . . . . 
-. . . . . e e e e e e . . . . . 
-. . . . e e e e e e e e . . . . 
-. . . e e e e e e e e e e . . . 
-. . e f f e e e e e e f f e . . 
-. e e e 1 f e e e e f 1 e e e . 
-. e e e 1 f f f f f f 1 e e e . 
-e e e e 1 f 1 e e 1 f 1 e e e e 
-e e e e 1 1 1 e e 1 1 1 e e e e 
-e e e e e e e e e e e e e e e e 
-. e e e e d d d d d d e e e e . 
-. . . . d d d d d d d d . . . . 
-. . f f d d d d d d d d . . . . 
-. f f f f f d d d d d f f . . . 
-. f f f f f f d d d f f f . . . 
-. . f f f f f . . f f f . . . . 
-`;
             case "image2":
             case "galoomba":return img`
 . . . . . . . . . . . . . . . . 
@@ -784,6 +764,45 @@ b b b b b b b b b b 3 3 3 3 . .
 .........fffffdddddff...........
 .........ffffffdddfff...........
 ..........fffff..fff............
+`;
+            case "CDzdBqw0d|Y0=-6XpNe=":
+            case "goomba":return img`
+. . . . . . . . . . . . . . . . 
+. . . . . . e e e e . . . . . . 
+. . . . . e e e e e e . . . . . 
+. . . . e e e e e e e e . . . . 
+. . . e e e e e e e e e e . . . 
+. . e f f e e e e e e f f e . . 
+. e e e 1 f e e e e f 1 e e e . 
+. e e e 1 f f f f f f 1 e e e . 
+e e e e 1 f 1 e e 1 f 1 e e e e 
+e e e e 1 1 1 e e 1 1 1 e e e e 
+e e e e e e e e e e e e e e e e 
+. e e e e 9 9 9 9 9 9 e e e e . 
+. . . . 9 9 9 9 9 9 9 9 . . . . 
+. . f f 9 9 9 9 9 9 9 9 . . . . 
+. f f f f f 9 9 9 9 9 f f . . . 
+. f f f f f f 9 9 9 f f f . . . 
+. . f f f f f . . f f f . . . . 
+`;
+            case "image12":
+            case "Mini Goomba":return img`
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . e e e e e . . . . . 
+. . . . . e f f e f f e . . . . 
+. . . . . e e 1 e 1 e e . . . . 
+. . . . e e e f e f e e e . . . 
+. . . . e e e e e e e e e . . . 
+. . . . e e f f f e f e e . . . 
+. . . . . e e e e f e e . . . . 
+. . . . . . 1 1 1 1 1 . . . . . 
+. . . . . f f 1 1 1 f f f . . . 
+. . . . . f f . . . f f f . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
 `;
         }
         return null;

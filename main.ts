@@ -9,6 +9,9 @@ namespace SpriteKind {
     export const Mickey = SpriteKind.create()
     export const BossProjectile = SpriteKind.create()
     export const Turret = SpriteKind.create()
+    export const Enemy2 = SpriteKind.create()
+    export const Enemy3 = SpriteKind.create()
+    export const ParagoombaProjectile = SpriteKind.create()
 }
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     sprites.destroy(luigi, effects.disintegrate, 1000)
@@ -228,14 +231,50 @@ sprites.onOverlap(SpriteKind.Mickey, SpriteKind.Enemy, function (sprite, otherSp
     scene.cameraShake(4, 500)
     pause(5000)
 })
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy3, function (sprite, otherSprite) {
+    if (Timer >= 5) {
+        info.changeScoreBy(1)
+        Paragoomba_Health2 += -1
+        scene.cameraShake(4, 500)
+        sprite.destroy(effects.fire, 2000)
+    }
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.ParagoombaProjectile, function (sprite, otherSprite) {
+    otherSprite.destroy(effects.fire, 500)
+    scene.cameraShake(4, 500)
+    info.changeLifeBy(-1)
+    pause(5000)
+})
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy2, function (sprite, otherSprite) {
+    if (Timer >= 5) {
+        info.changeScoreBy(1)
+        Paragoomba_Health += -1
+        scene.cameraShake(4, 500)
+        sprite.destroy(effects.fire, 2000)
+    }
+})
 info.onLifeZero(function () {
     mario.destroy(effects.halo, 1000)
     game.gameOver(false)
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy2, function (sprite, otherSprite) {
+    otherSprite.destroy(effects.fire, 500)
+    scene.cameraShake(4, 500)
+    info.changeLifeBy(-1)
+    pause(5000)
 })
 sprites.onOverlap(SpriteKind.Turret, SpriteKind.BossProjectile, function (sprite, otherSprite) {
     sprite.destroy(effects.ashes, 500)
     otherSprite.destroy(effects.ashes, 500)
     scene.cameraShake(4, 500)
+})
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.ParagoombaProjectile, function (sprite, otherSprite) {
+    otherSprite.destroy(effects.fire, 2000)
+    info.changeScoreBy(1)
+    otherSprite.setVelocity(0, 50)
+    otherSprite.setBounceOnWall(false)
+    scene.cameraShake(4, 500)
+    pause(5000)
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     otherSprite.destroy(effects.fire, 2000)
@@ -252,17 +291,22 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
     pause(5000)
 })
 let goomba: Sprite = null
+let Mini_Goomba: Sprite = null
+let Paragoomba2: Sprite = null
 let Paragoomba: Sprite = null
+let Paragoomba_Spawn_Decider = 0
 let enemy_bullet: Sprite = null
 let Morpho2: Sprite = null
 let Butterfly: Sprite = null
 let MorphoTrigger = 0
 let blue_koopa: Sprite = null
 let koopa: Sprite = null
-let Timer = 0
 let red_koopa: Sprite = null
 let galoomba: Sprite = null
 let Mickey_mouse: Sprite = null
+let Paragoomba_Health = 0
+let Paragoomba_Health2 = 0
+let Timer = 0
 let bullet: Sprite = null
 let EX_Bullet_10: Sprite = null
 let EX_Bullet_9: Sprite = null
@@ -474,11 +518,6 @@ forever(function () {
     }
 })
 forever(function () {
-    if (true) {
-    	
-    }
-})
-forever(function () {
     if (info.score() < 10) {
         pause(1000)
     }
@@ -491,6 +530,11 @@ forever(function () {
     enemy_bullet = sprites.createProjectileFromSprite(assets.image`mickey bullet up`, Mickey_mouse, 0, -100)
 })
 forever(function () {
+    if (true) {
+    	
+    }
+})
+forever(function () {
     if (MorphoTrigger == 1) {
         pause(1000)
         Morpho2 = sprites.create(assets.image`Morpho`, SpriteKind.Morpho)
@@ -499,10 +543,63 @@ forever(function () {
     }
 })
 forever(function () {
+    Paragoomba_Spawn_Decider = randint(1, 2)
+    pause(4500)
+})
+forever(function () {
+    if (Paragoomba_Health <= 0) {
+        sprites.destroy(Paragoomba, effects.fire, 2000)
+    }
+})
+forever(function () {
     if (Timer >= 5) {
-        Paragoomba = sprites.create(assets.image`Paragoomba`, SpriteKind.Enemy)
-        Paragoomba.setPosition(133, 16)
-        pause(4500)
+        if (Paragoomba_Spawn_Decider == 1) {
+            pauseUntil(() => Paragoomba_Health <= 0)
+            Paragoomba_Health = 5
+            Paragoomba = sprites.create(assets.image`Paragoomba`, SpriteKind.Enemy2)
+            animation.runImageAnimation(
+            Paragoomba,
+            [img`
+                .....dd.......eeee.......dd.....
+                ....dd1ddd...eeeeee...ddd1dd....
+                ....d1d111d.eeeeeeee.d111d1d....
+                ....d11d111eeeeeeeeee111d11d....
+                .....d1111effeeeeeeffe1111d.....
+                ......d11eee1feeeef1eee11d......
+                ....dd111eee1ffffff1eee111dd....
+                ...dd111eeee1f1ee1f1eeee111dd...
+                ...d1d11eeee111ee111eeee11d1d...
+                ....d1d1eeeeeeeeeeeeeeee1d1d....
+                .....d111eeeeddddddeeee111d.....
+                ......dddd..dddddddd..dddd......
+                ..........ffdddddddd............
+                .........fffffdddddff...........
+                .........ffffffdddfff...........
+                ..........fffff..fff............
+                `,img`
+                .....dd.......eeee.......dd.....
+                ....dd1ddd...eeeeee...ddd1dd....
+                ....d1d111d.eeeeeeee.d111d1d....
+                ....d11d111eeeeeeeeee111d11d....
+                .....d1111effeeeeeeffe1111d.....
+                ......d11eee1feeeef1eee11d......
+                ....dd111eee1ffffff1eee111dd....
+                ...dd111eeee1f1ee1f1eeee111dd...
+                ...d1d11eeee111ee111eeee11d1d...
+                ....d1d1eeeeeeeeeeeeeeee1d1d....
+                .....d111eeeeddddddeeee111d.....
+                ......dddd..dddddddd..dddd......
+                ............ddddddddff..........
+                ...........ffdddddfffff.........
+                ...........fffdddffffff.........
+                ............fff..fffff..........
+                `],
+            150,
+            true
+            )
+            Paragoomba.setPosition(133, 16)
+            Paragoomba_Spawn_Decider = 0
+        }
     }
 })
 forever(function () {
@@ -511,6 +608,70 @@ forever(function () {
         minniemouse = sprites.createProjectileFromSprite(assets.image`Minnie Mouse`, luigi, 25, 0)
         minniemouse.setKind(SpriteKind.Turret)
         pause(7500)
+    }
+})
+forever(function () {
+    if (Paragoomba_Health2 <= 0) {
+        sprites.destroy(Paragoomba2, effects.fire, 2000)
+    }
+})
+forever(function () {
+    if (Paragoomba_Health > 0) {
+        if (Paragoomba_Health <= 5) {
+            Mini_Goomba = sprites.createProjectileFromSprite(assets.image`Mini Goomba`, Paragoomba, 50, 50)
+            Mini_Goomba.setKind(SpriteKind.ParagoombaProjectile)
+            Mini_Goomba.follow(mario)
+        }
+    }
+    pause(500)
+})
+forever(function () {
+    if (Paragoomba_Spawn_Decider == 2) {
+        pauseUntil(() => Paragoomba_Health2 <= 0)
+        Paragoomba_Health2 = 5
+        Paragoomba2 = sprites.create(assets.image`Paragoomba`, SpriteKind.Enemy3)
+        animation.runImageAnimation(
+        Paragoomba2,
+        [img`
+            .....dd.......eeee.......dd.....
+            ....dd1ddd...eeeeee...ddd1dd....
+            ....d1d111d.eeeeeeee.d111d1d....
+            ....d11d111eeeeeeeeee111d11d....
+            .....d1111effeeeeeeffe1111d.....
+            ......d11eee1feeeef1eee11d......
+            ....dd111eee1ffffff1eee111dd....
+            ...dd111eeee1f1ee1f1eeee111dd...
+            ...d1d11eeee111ee111eeee11d1d...
+            ....d1d1eeeeeeeeeeeeeeee1d1d....
+            .....d111eeeeddddddeeee111d.....
+            ......dddd..dddddddd..dddd......
+            ..........ffdddddddd............
+            .........fffffdddddff...........
+            .........ffffffdddfff...........
+            ..........fffff..fff............
+            `,img`
+            .....dd.......eeee.......dd.....
+            ....dd1ddd...eeeeee...ddd1dd....
+            ....d1d111d.eeeeeeee.d111d1d....
+            ....d11d111eeeeeeeeee111d11d....
+            .....d1111effeeeeeeffe1111d.....
+            ......d11eee1feeeef1eee11d......
+            ....dd111eee1ffffff1eee111dd....
+            ...dd111eeee1f1ee1f1eeee111dd...
+            ...d1d11eeee111ee111eeee11d1d...
+            ....d1d1eeeeeeeeeeeeeeee1d1d....
+            .....d111eeeeddddddeeee111d.....
+            ......dddd..dddddddd..dddd......
+            ............ddddddddff..........
+            ...........ffdddddfffff.........
+            ...........fffdddffffff.........
+            ............fff..fffff..........
+            `],
+        150,
+        true
+        )
+        Paragoomba2.setPosition(133, 99)
+        Paragoomba_Spawn_Decider = 0
     }
 })
 forever(function () {
@@ -531,6 +692,19 @@ forever(function () {
     if (info.score() >= 18) {
         pause(375)
     }
+})
+forever(function () {
+    if (Paragoomba_Health2 > 0) {
+        if (Paragoomba_Health2 <= 5) {
+            Mini_Goomba = sprites.createProjectileFromSprite(assets.image`Mini Goomba`, Paragoomba2, 50, 50)
+            Mini_Goomba.setKind(SpriteKind.ParagoombaProjectile)
+            Mini_Goomba.follow(mario)
+        }
+    }
+    pause(500)
+})
+forever(function () {
+	
 })
 game.onUpdateInterval(500, function () {
     goomba = sprites.create(assets.image`goomba`, SpriteKind.Enemy)
