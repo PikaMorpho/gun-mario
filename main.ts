@@ -295,6 +295,7 @@ let Mini_Goomba: Sprite = null
 let Paragoomba2: Sprite = null
 let Paragoomba: Sprite = null
 let Paragoomba_Spawn_Decider = 0
+let Disable = 0
 let enemy_bullet: Sprite = null
 let Morpho2: Sprite = null
 let Butterfly: Sprite = null
@@ -530,9 +531,7 @@ forever(function () {
     enemy_bullet = sprites.createProjectileFromSprite(assets.image`mickey bullet up`, Mickey_mouse, 0, -100)
 })
 forever(function () {
-    if (true) {
-    	
-    }
+    Disable = 1
 })
 forever(function () {
     if (MorphoTrigger == 1) {
@@ -540,6 +539,16 @@ forever(function () {
         Morpho2 = sprites.create(assets.image`Morpho`, SpriteKind.Morpho)
         Morpho2.follow(mario)
         pause(100000000000000000)
+    }
+})
+forever(function () {
+    if (Disable == 1) {
+        sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+    }
+})
+forever(function () {
+    if (Disable == 2) {
+        info.setLife(3)
     }
 })
 forever(function () {
@@ -621,6 +630,46 @@ forever(function () {
             Mini_Goomba = sprites.createProjectileFromSprite(assets.image`Mini Goomba`, Paragoomba, 50, 50)
             Mini_Goomba.setKind(SpriteKind.ParagoombaProjectile)
             Mini_Goomba.follow(mario)
+            animation.runImageAnimation(
+            Mini_Goomba,
+            [img`
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . e e e e e . . . . . 
+                . . . . . e f f e f f e . . . . 
+                . . . . . e e 1 e 1 e e . . . . 
+                . . . . e e e f e f e e e . . . 
+                . . . . e e e e e e e e e . . . 
+                . . . . e e f f f e f e e . . . 
+                . . . . . e e e e f e e . . . . 
+                . . . . . . d d d d d f . . . . 
+                . . . . . f f d d d f f f . . . 
+                . . . . . f f f . . f f f . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                `,img`
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . e e e e e . . . . . 
+                . . . . . e f f e f f e . . . . 
+                . . . . . e e 1 e 1 e e . . . . 
+                . . . . e e e f e f e e e . . . 
+                . . . . e e e e e e e e e . . . 
+                . . . . e e f f f e f e e . . . 
+                . . . . . e e e e f e e . . . . 
+                . . . . . f d d d d d . . . . . 
+                . . . . f f f d d d f f . . . . 
+                . . . . f f f . . f f f . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                `],
+            75,
+            true
+            )
         }
     }
     pause(500)
@@ -694,17 +743,57 @@ forever(function () {
     }
 })
 forever(function () {
+	
+})
+forever(function () {
     if (Paragoomba_Health2 > 0) {
         if (Paragoomba_Health2 <= 5) {
             Mini_Goomba = sprites.createProjectileFromSprite(assets.image`Mini Goomba`, Paragoomba2, 50, 50)
             Mini_Goomba.setKind(SpriteKind.ParagoombaProjectile)
             Mini_Goomba.follow(mario)
+            animation.runImageAnimation(
+            Mini_Goomba,
+            [img`
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . e e e e e . . . . . 
+                . . . . . e f f e f f e . . . . 
+                . . . . . e e 1 e 1 e e . . . . 
+                . . . . e e e f e f e e e . . . 
+                . . . . e e e e e e e e e . . . 
+                . . . . e e f f f e f e e . . . 
+                . . . . . e e e e f e e . . . . 
+                . . . . . . d d d d d f . . . . 
+                . . . . . f f d d d f f f . . . 
+                . . . . . f f f . . f f f . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                `,img`
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . e e e e e . . . . . 
+                . . . . . e f f e f f e . . . . 
+                . . . . . e e 1 e 1 e e . . . . 
+                . . . . e e e f e f e e e . . . 
+                . . . . e e e e e e e e e . . . 
+                . . . . e e f f f e f e e . . . 
+                . . . . . e e e e f e e . . . . 
+                . . . . . f d d d d d . . . . . 
+                . . . . f f f d d d f f . . . . 
+                . . . . f f f . . f f f . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                `],
+            75,
+            true
+            )
         }
     }
     pause(500)
-})
-forever(function () {
-	
 })
 game.onUpdateInterval(500, function () {
     goomba = sprites.create(assets.image`goomba`, SpriteKind.Enemy)
