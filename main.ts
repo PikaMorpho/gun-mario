@@ -241,7 +241,6 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy3, function (sprite, ot
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.ParagoombaProjectile, function (sprite, otherSprite) {
     otherSprite.destroy(effects.fire, 500)
-    scene.cameraShake(4, 500)
     info.changeLifeBy(-1)
     pause(5000)
 })
@@ -295,6 +294,10 @@ let Mini_Goomba: Sprite = null
 let Paragoomba2: Sprite = null
 let Paragoomba: Sprite = null
 let Paragoomba_Spawn_Decider = 0
+let Disable4 = 0
+let Disable3 = 0
+let Disable2 = 0
+let Disable1 = 0
 let Disable = 0
 let enemy_bullet: Sprite = null
 let Morpho2: Sprite = null
@@ -531,7 +534,11 @@ forever(function () {
     enemy_bullet = sprites.createProjectileFromSprite(assets.image`mickey bullet up`, Mickey_mouse, 0, -100)
 })
 forever(function () {
-    Disable = 1
+    Disable = 0
+    Disable1 = 0
+    Disable2 = 0
+    Disable3 = 0
+    Disable4 = 0
 })
 forever(function () {
     if (MorphoTrigger == 1) {
@@ -542,13 +549,29 @@ forever(function () {
     }
 })
 forever(function () {
+    if (Disable1 == 1) {
+        info.setLife(3)
+    }
+})
+forever(function () {
     if (Disable == 1) {
         sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
     }
 })
 forever(function () {
-    if (Disable == 2) {
-        info.setLife(3)
+    if (Disable2 == 1) {
+        sprites.destroyAllSpritesOfKind(SpriteKind.Mickey)
+        sprites.destroyAllSpritesOfKind(SpriteKind.BossProjectile)
+    }
+})
+forever(function () {
+    if (Disable4 == 1) {
+        info.setScore(0)
+    }
+})
+forever(function () {
+    if (Disable3 == 1) {
+        sprites.destroyAllSpritesOfKind(SpriteKind.Projectile)
     }
 })
 forever(function () {
@@ -667,7 +690,7 @@ forever(function () {
                 . . . . . . . . . . . . . . . . 
                 . . . . . . . . . . . . . . . . 
                 `],
-            75,
+            150,
             true
             )
         }
@@ -788,7 +811,7 @@ forever(function () {
                 . . . . . . . . . . . . . . . . 
                 . . . . . . . . . . . . . . . . 
                 `],
-            75,
+            150,
             true
             )
         }
