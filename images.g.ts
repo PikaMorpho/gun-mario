@@ -765,26 +765,6 @@ b b b b b b b b b b 3 3 3 3 . .
 .........ffffffdddfff...........
 ..........fffff..fff............
 `;
-            case "CDzdBqw0d|Y0=-6XpNe=":
-            case "goomba":return img`
-. . . . . . . . . . . . . . . . 
-. . . . . . e e e e . . . . . . 
-. . . . . e e e e e e . . . . . 
-. . . . e e e e e e e e . . . . 
-. . . e e e e e e e e e e . . . 
-. . e f f e e e e e e f f e . . 
-. e e e 1 f e e e e f 1 e e e . 
-. e e e 1 f f f f f f 1 e e e . 
-e e e e 1 f 1 e e 1 f 1 e e e e 
-e e e e 1 1 1 e e 1 1 1 e e e e 
-e e e e e e e e e e e e e e e e 
-. e e e e d d d d d d e e e e . 
-. . . . d d d d d d d d . . . . 
-. . f f d d d d d d d d . . . . 
-. f f f f f d d d d d f f . . . 
-. f f f f f f d d d f f f . . . 
-. . f f f f f . . f f f . . . . 
-`;
             case "image12":
             case "Mini Goomba":return img`
 . . . . . . . . . . . . . . . . 
@@ -802,6 +782,63 @@ e e e e e e e e e e e e e e e e
 . . . . . f f d d d f f f . . . 
 . . . . . f f f . . f f f . . . 
 . . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+`;
+            case "CDzdBqw0d|Y0=-6XpNe=":
+            case "goomba":return img`
+. . . . . . e e e e . . . . . . 
+. . . . . e e e e e e . . . . . 
+. . . . e e e e e e e e . . . . 
+. . . e e e e e e e e e e . . . 
+. . e f f e e e e e e f f e . . 
+. e e e 1 f e e e e f 1 e e e . 
+. e e e 1 f f f f f f 1 e e e . 
+e e e e 1 f 1 e e 1 f 1 e e e e 
+e e e e 1 1 1 e e 1 1 1 e e e e 
+e e e e e e e e e e e e e e e e 
+. e e e e d d d d d d e e e e . 
+. . . . d d d d d d d d . . . . 
+. . f f d d d d d d d d . . . . 
+. f f f f f d d d d d f f . . . 
+. f f f f f f d d d f f f . . . 
+. . f f f f f . . f f f . . . . 
+`;
+            case "image13":
+            case "myImage":return img`
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+`;
+            case "image14":
+            case "Bob-omb":return img`
+. . . . . . . . . . . . . . . . 
+. . . . . . . 1 1 . . . . . . . 
+. . . . . . 1 . . 1 . . . . . . 
+. . . c c c c c . . 1 . . . . . 
+. . c c c c c c c . 1 . 5 . . . 
+. c 1 c 1 c c c c c . 5 . 5 . . 
+. c 1 c 1 c c c c c 5 . 5 . . . 
+. c 1 c 1 c c c c c 5 . 5 . . . 
+. c c c c c c c c c . 5 . 5 . . 
+. c c c c c c c c c . . 5 . . . 
+. . c c c c c c c . . . . . . . 
+. . . c c c c c . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. 5 5 5 . . 5 5 5 . . . . . . . 
+5 5 5 5 . 5 5 5 5 . . . . . . . 
 . . . . . . . . . . . . . . . . 
 `;
         }
