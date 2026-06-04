@@ -230,7 +230,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy3, function (sprite, otherS
     pause(5000)
 })
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (game2 == 1) {
+    if (Game_State == 1) {
         bullet = sprites.createProjectileFromSprite(assets.image`mario bullet`, mario, 200, 0)
         if (info.score() >= 3) {
             bullet = sprites.createProjectileFromSprite(assets.image`mario bullet`, mario, 200, 30)
@@ -524,8 +524,8 @@ let Paragoomba_Health2 = 0
 let luigi: Sprite = null
 let mario: Sprite = null
 let Luigi_State = 0
-let game2 = 0
-game2 = 1
+let Game_State = 0
+Game_State = 1
 Luigi_State = 0
 let EX_Health = 2000
 mario = sprites.create(assets.image`mario`, SpriteKind.Player)
