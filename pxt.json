@@ -7,7 +7,8 @@
         "animation": "*",
         "pxt-status-bar": "github:jwunderl/pxt-status-bar#v0.4.2",
         "controller": "*",
-        "sprite-scaling": "*"
+        "sprite-scaling": "*",
+        "Timers": "github:microsoft/arcade-timers#v1.1.0"
     },
     "files": [
         "main.blocks",
