@@ -20,6 +20,8 @@ namespace SpriteKind {
     export const luigi_bullet = SpriteKind.create()
     export const Invulnerable = SpriteKind.create()
     export const mario_bullet = SpriteKind.create()
+    export const big_bullet = SpriteKind.create()
+    export const Intro = SpriteKind.create()
 }
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     Luigi_State = 0
@@ -32,6 +34,14 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     500,
     true
     )
+})
+sprites.onOverlap(SpriteKind.Explosion, SpriteKind.Enemy, function (sprite, otherSprite) {
+    otherSprite.destroy(effects.fire, 2000)
+    info.changeScoreBy(1)
+    otherSprite.setVelocity(0, 50)
+    otherSprite.setBounceOnWall(false)
+    scene.cameraShake(4, 500)
+    pause(5000)
 })
 sprites.onOverlap(SpriteKind.Mickey, SpriteKind.Enemy3, function (sprite, otherSprite) {
     Paragoomba_Health2 += -5
@@ -67,6 +77,15 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.BossProjectile, function (sprite
     EX_Bullet_10.destroy(effects.ashes, 500)
     scene.cameraShake(4, 500)
     info.changeLifeBy(-1)
+})
+sprites.onOverlap(SpriteKind.Explosion, SpriteKind.Turret, function (sprite, otherSprite) {
+    Luigi_State = 2
+    otherSprite.destroy(effects.fire, 2000)
+    info.changeScoreBy(1)
+    otherSprite.setVelocity(0, 50)
+    otherSprite.setBounceOnWall(false)
+    scene.cameraShake(4, 500)
+    pause(5000)
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.EX, function (sprite, otherSprite) {
     sprite.destroy(effects.disintegrate, 500)
@@ -221,6 +240,11 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.EX, function (sprite, otherS
     )
     pause(5000)
 })
+sprites.onOverlap(SpriteKind.Explosion, SpriteKind.Player, function (sprite, otherSprite) {
+    info.changeLifeBy(-1)
+    scene.cameraShake(4, 500)
+    pause(5000)
+})
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy3, function (sprite, otherSprite) {
     Paragoomba_Health2 = 0
     otherSprite.destroy(effects.fire, 500)
@@ -231,26 +255,29 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy3, function (sprite, otherS
 })
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     if (Game_State == 1) {
-        bullet = sprites.createProjectileFromSprite(assets.image`mario bullet`, mario, 200, 0)
-        if (info.score() >= 3) {
-            bullet = sprites.createProjectileFromSprite(assets.image`mario bullet`, mario, 200, 30)
-            bullet = sprites.createProjectileFromSprite(assets.image`mario bullet`, mario, 200, -30)
-        }
-        if (info.score() >= 6) {
-            bullet = sprites.createProjectileFromSprite(assets.image`mario bullet`, mario, 400, 15)
-            bullet = sprites.createProjectileFromSprite(assets.image`mario bullet`, mario, 400, 15)
-            bullet = sprites.createProjectileFromSprite(assets.image`mario bullet`, mario, 400, 40)
-            bullet = sprites.createProjectileFromSprite(assets.image`mario bullet`, mario, 400, -40)
-        }
-        if (info.score() >= 10) {
-            bullet = sprites.createProjectileFromSprite(assets.image`Big Bullet`, mario, 100, 0)
-        }
-        if (info.score() >= 20) {
-        	
-        }
-        if (info.score() >= 50) {
-            bullet = sprites.createProjectileFromSprite(assets.image`mario bullet`, mario, 200, 30)
-            bullet = sprites.createProjectileFromSprite(assets.image`mario bullet`, mario, 200, -30)
+        if (Disable3 == 0) {
+            bullet = sprites.createProjectileFromSprite(assets.image`mario bullet`, mario, 200, 0)
+            if (info.score() >= 3) {
+                bullet = sprites.createProjectileFromSprite(assets.image`mario bullet`, mario, 200, 30)
+                bullet = sprites.createProjectileFromSprite(assets.image`mario bullet`, mario, 200, -30)
+            }
+            if (info.score() >= 6) {
+                bullet = sprites.createProjectileFromSprite(assets.image`mario bullet`, mario, 400, 15)
+                bullet = sprites.createProjectileFromSprite(assets.image`mario bullet`, mario, 400, 15)
+                bullet = sprites.createProjectileFromSprite(assets.image`mario bullet`, mario, 400, 40)
+                bullet = sprites.createProjectileFromSprite(assets.image`mario bullet`, mario, 400, -40)
+            }
+            if (info.score() >= 10) {
+                big_bullet = sprites.createProjectileFromSprite(assets.image`Big Bullet`, mario, 100, 0)
+                big_bullet.setKind(SpriteKind.big_bullet)
+            }
+            if (info.score() >= 20) {
+                bullet = sprites.createProjectileFromSprite(assets.image`mario bullet`, mario, 200, 30)
+                bullet = sprites.createProjectileFromSprite(assets.image`mario bullet`, mario, 200, -30)
+            }
+            if (info.score() >= 50) {
+            	
+            }
         }
     }
 })
@@ -261,6 +288,16 @@ sprites.onOverlap(SpriteKind.Mickey, SpriteKind.Enemy, function (sprite, otherSp
     otherSprite.setBounceOnWall(false)
     scene.cameraShake(4, 500)
     pause(5000)
+})
+sprites.onOverlap(SpriteKind.big_bullet, SpriteKind.Enemy2, function (sprite, otherSprite) {
+    if (Paragoomba_Health > 0) {
+        info.changeScoreBy(1)
+        Paragoomba_Health += -1
+        big_bullet_pierce += -1
+        scene.cameraShake(4, 500)
+        big_bullet.startEffect(effects.fire, 2000)
+        pause(500)
+    }
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy3, function (sprite, otherSprite) {
     if (Timer >= 5) {
@@ -275,6 +312,13 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.ParagoombaProjectile, function (
     info.changeLifeBy(-1)
     pause(5000)
 })
+sprites.onOverlap(SpriteKind.Explosion, SpriteKind.luigi_bullet, function (sprite, otherSprite) {
+    otherSprite.destroy(effects.fire, 2000)
+    otherSprite.setVelocity(0, 50)
+    otherSprite.setBounceOnWall(false)
+    scene.cameraShake(4, 500)
+    pause(5000)
+})
 sprites.onOverlap(SpriteKind.luigi_bullet, SpriteKind.Bob_omb, function (sprite, otherSprite) {
     if (Bobomb_Anger < 5) {
         info.changeScoreBy(1)
@@ -283,7 +327,33 @@ sprites.onOverlap(SpriteKind.luigi_bullet, SpriteKind.Bob_omb, function (sprite,
         sprite.destroy(effects.fire, 2000)
     }
 })
+sprites.onOverlap(SpriteKind.Explosion, SpriteKind.Enemy2, function (sprite, otherSprite) {
+    Paragoomba_Health = 0
+    otherSprite.destroy(effects.fire, 2000)
+    info.changeScoreBy(1)
+    otherSprite.setVelocity(0, 50)
+    otherSprite.setBounceOnWall(false)
+    scene.cameraShake(4, 500)
+    pause(5000)
+})
 sprites.onOverlap(SpriteKind.luigi_bullet, SpriteKind.Enemy, function (sprite, otherSprite) {
+    otherSprite.destroy(effects.fire, 2000)
+    info.changeScoreBy(1)
+    otherSprite.setVelocity(0, 50)
+    otherSprite.setBounceOnWall(false)
+    scene.cameraShake(4, 500)
+    pause(5000)
+})
+sprites.onOverlap(SpriteKind.Explosion, SpriteKind.blue_koopa, function (sprite, otherSprite) {
+    blue_koopa_health = 0
+    otherSprite.destroy(effects.fire, 2000)
+    info.changeScoreBy(1)
+    otherSprite.setVelocity(0, 50)
+    otherSprite.setBounceOnWall(false)
+    scene.cameraShake(4, 500)
+    pause(5000)
+})
+sprites.onOverlap(SpriteKind.Explosion, SpriteKind.ParagoombaProjectile, function (sprite, otherSprite) {
     otherSprite.destroy(effects.fire, 2000)
     info.changeScoreBy(1)
     otherSprite.setVelocity(0, 50)
@@ -373,6 +443,15 @@ sprites.onOverlap(SpriteKind.luigi_bullet, SpriteKind.Enemy3, function (sprite, 
         sprite.destroy(effects.fire, 2000)
     }
 })
+sprites.onOverlap(SpriteKind.Explosion, SpriteKind.Enemy3, function (sprite, otherSprite) {
+    Paragoomba_Health2 = 0
+    otherSprite.destroy(effects.fire, 2000)
+    info.changeScoreBy(1)
+    otherSprite.setVelocity(0, 50)
+    otherSprite.setBounceOnWall(false)
+    scene.cameraShake(4, 500)
+    pause(5000)
+})
 info.onLifeZero(function () {
     mario.destroy(effects.halo, 1000)
     game.gameOver(false)
@@ -406,6 +485,27 @@ sprites.onOverlap(SpriteKind.Turret, SpriteKind.BossProjectile, function (sprite
     otherSprite.destroy(effects.ashes, 500)
     scene.cameraShake(4, 500)
 })
+sprites.onOverlap(SpriteKind.Explosion, SpriteKind.Mickey, function (sprite, otherSprite) {
+    otherSprite.destroy(effects.fire, 2000)
+    otherSprite.setVelocity(50, 0)
+    otherSprite.setBounceOnWall(false)
+    scene.cameraShake(4, 500)
+    pause(5000)
+})
+sprites.onOverlap(SpriteKind.Explosion, SpriteKind.mario_bullet, function (sprite, otherSprite) {
+    otherSprite.destroy(effects.fire, 2000)
+    otherSprite.setVelocity(0, 50)
+    otherSprite.setBounceOnWall(false)
+    scene.cameraShake(4, 500)
+    pause(5000)
+})
+sprites.onOverlap(SpriteKind.Explosion, SpriteKind.MickeyBullet, function (sprite, otherSprite) {
+    otherSprite.destroy(effects.fire, 2000)
+    otherSprite.setVelocity(0, 50)
+    otherSprite.setBounceOnWall(false)
+    scene.cameraShake(4, 500)
+    pause(5000)
+})
 sprites.onOverlap(SpriteKind.MickeyBullet, SpriteKind.blue_koopa, function (sprite, otherSprite) {
     sprite.destroy(effects.fire, 2000)
     if (blue_koopa_health <= 3) {
@@ -425,10 +525,12 @@ sprites.onOverlap(SpriteKind.MickeyBullet, SpriteKind.blue_koopa, function (spri
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Bob_omb, function (sprite, otherSprite) {
     if (Bobomb_Anger < 5) {
-        info.changeScoreBy(1)
-        Bobomb_Health += -1
-        scene.cameraShake(4, 500)
-        sprite.destroy(effects.fire, 2000)
+        if (Bobomb_Health > 0) {
+            info.changeScoreBy(1)
+            Bobomb_Health += -1
+            scene.cameraShake(4, 500)
+            sprite.destroy(effects.fire, 2000)
+        }
     }
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.ParagoombaProjectile, function (sprite, otherSprite) {
@@ -439,10 +541,39 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.ParagoombaProjectile, functi
     scene.cameraShake(4, 500)
     pause(5000)
 })
+sprites.onOverlap(SpriteKind.big_bullet, SpriteKind.Enemy3, function (sprite, otherSprite) {
+    if (Paragoomba_Health > 0) {
+        info.changeScoreBy(1)
+        Paragoomba_Health2 += -1
+        big_bullet_pierce += -1
+        scene.cameraShake(4, 500)
+        big_bullet.startEffect(effects.fire, 2000)
+        pause(500)
+    }
+})
 sprites.onOverlap(SpriteKind.MickeyBullet, SpriteKind.ParagoombaProjectile, function (sprite, otherSprite) {
     otherSprite.destroy(effects.fire, 2000)
     info.changeScoreBy(1)
     otherSprite.setVelocity(0, 50)
+    otherSprite.setBounceOnWall(false)
+    scene.cameraShake(4, 500)
+    pause(5000)
+})
+sprites.onOverlap(SpriteKind.big_bullet, SpriteKind.Bob_omb, function (sprite, otherSprite) {
+    if (Bobomb_Anger < 5) {
+        if (Bobomb_Health > 0) {
+            info.changeScoreBy(1)
+            Bobomb_Health += -1
+            big_bullet_pierce += -1
+            scene.cameraShake(4, 500)
+            big_bullet.startEffect(effects.fire, 2000)
+            pause(500)
+        }
+    }
+})
+sprites.onOverlap(SpriteKind.Explosion, SpriteKind.Minnie, function (sprite, otherSprite) {
+    otherSprite.destroy(effects.fire, 2000)
+    otherSprite.setVelocity(50, 0)
     otherSprite.setBounceOnWall(false)
     scene.cameraShake(4, 500)
     pause(5000)
@@ -480,12 +611,12 @@ let Mini_Goomba: Sprite = null
 let Paragoomba2: Sprite = null
 let Paragoomba: Sprite = null
 let Disable4 = 0
-let Disable3 = 0
 let Disable1 = 0
 let Disable = 0
+let Disable6 = 0
 let Paragoomba_Spawn_Decider = 0
 let Disable5 = 0
-let Disable6 = 0
+let Mickey_mouse: Sprite = null
 let enemy_bullet3: Sprite = null
 let enemy_bullet2: Sprite = null
 let enemy_bullet1: Sprite = null
@@ -495,19 +626,23 @@ let enemy_bullet: Sprite = null
 let Bobomb: Sprite = null
 let Fuse = 0
 let Anger_Fuse = 0
+let Disable7 = 0
 let Morpho2: Sprite = null
 let Butterfly: Sprite = null
 let MorphoTrigger = 0
 let blue_koopa: Sprite = null
+let Mickey_State = 0
 let koopa: Sprite = null
 let red_koopa: Sprite = null
 let galoomba: Sprite = null
-let Mickey_mouse: Sprite = null
 let Bobomb_Health = 0
-let Paragoomba_Health = 0
 let blue_koopa_health = 0
 let Timer = 0
+let big_bullet_pierce = 0
+let Paragoomba_Health = 0
+let big_bullet: Sprite = null
 let bullet: Sprite = null
+let Disable3 = 0
 let EX_Bullet_10: Sprite = null
 let EX_Bullet_9: Sprite = null
 let EX_Bullet_8: Sprite = null
@@ -521,29 +656,37 @@ let EX_Bullet_1: Sprite = null
 let Bobomb_Anger = 0
 let EX: Sprite = null
 let Paragoomba_Health2 = 0
-let luigi: Sprite = null
 let mario: Sprite = null
+let luigi: Sprite = null
 let Luigi_State = 0
 let Game_State = 0
-Game_State = 1
-Luigi_State = 0
 let EX_Health = 2000
-mario = sprites.create(assets.image`mario`, SpriteKind.Player)
-controller.moveSprite(mario, 200, 200)
-mario.setStayInScreen(true)
-info.setLife(3)
 scene.setBackgroundImage(assets.image`sky`)
+let Intro_Mario = sprites.create(img`
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . 2 . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    `, SpriteKind.Intro)
 animation.runImageAnimation(
-mario,
-assets.animation`mario blink`,
+Intro_Mario,
+assets.animation`Intro Mario`,
 500,
-true
+false
 )
-game.onUpdateInterval(15000, function () {
-    Mickey_mouse = sprites.create(assets.image`why are there two`, SpriteKind.Mickey)
-    Mickey_mouse.setPosition(0, randint(0, 115))
-    Mickey_mouse.setVelocity(50, 0)
-})
+Game_State = 1
 game.onUpdateInterval(375, function () {
 	
 })
@@ -551,65 +694,69 @@ game.onUpdateInterval(2500, function () {
 	
 })
 game.onUpdateInterval(2500, function () {
-    galoomba = sprites.create(assets.image`galoomba`, SpriteKind.Enemy)
-    galoomba.setPosition(160, randint(0, 115))
-    galoomba.setVelocity(-100, 0)
-    galoomba.setFlag(SpriteFlag.AutoDestroy, true)
-    galoomba.setBounceOnWall(true)
-    animation.runImageAnimation(
-    galoomba,
-    [img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . 4 4 4 4 . . . . . . 
-        . . . . . 4 4 4 4 4 4 . . . . . 
-        . . . . 4 4 4 4 4 4 4 4 . . . . 
-        . . . 4 4 4 4 4 4 4 4 4 4 . . . 
-        . . 4 f f 4 4 4 4 4 4 f f 4 . . 
-        . 4 4 4 1 f 4 4 4 4 f 1 4 4 4 . 
-        . 4 4 4 1 f f f f f f 1 4 4 4 . 
-        4 4 4 4 1 f 1 4 4 1 f 1 4 4 4 4 
-        4 4 4 4 1 1 1 4 4 1 1 1 4 4 4 4 
-        4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
-        . 4 4 4 4 7 7 7 7 7 7 4 4 4 4 . 
-        . . . . 7 7 7 7 7 7 7 7 . . . . 
-        . . e e 7 7 7 7 7 7 7 7 . . . . 
-        . e e e e e 7 7 7 7 7 e e . . . 
-        . e e e e e e 7 7 7 e e e . . . 
-        . . e e e e e . . e e e . . . . 
-        `,img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . 4 4 4 4 . . . . . . 
-        . . . . . 4 4 4 4 4 4 . . . . . 
-        . . . . 4 4 4 4 4 4 4 4 . . . . 
-        . . . 4 4 4 4 4 4 4 4 4 4 . . . 
-        . . 4 f f 4 4 4 4 4 4 f f 4 . . 
-        . 4 4 4 1 f 4 4 4 4 f 1 4 4 4 . 
-        . 4 4 4 1 f f f f f f 1 4 4 4 . 
-        4 4 4 4 1 f 1 4 4 1 f 1 4 4 4 4 
-        4 4 4 4 1 1 1 4 4 1 1 1 4 4 4 4 
-        4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
-        . 4 4 4 4 7 7 7 7 7 7 4 4 4 4 . 
-        . . . . 7 7 7 7 7 7 7 7 . . . . 
-        . . . . 7 7 7 7 7 7 7 7 e e . . 
-        . . . e e 7 7 7 7 7 e e e e e . 
-        . . . e e e 7 7 7 e e e e e e . 
-        . . . . e e e . . e e e e e . . 
-        `],
-    150,
-    true
-    )
+    if (Game_State == 1) {
+        galoomba = sprites.create(assets.image`galoomba`, SpriteKind.Enemy)
+        galoomba.setPosition(160, randint(0, 115))
+        galoomba.setVelocity(-100, 0)
+        galoomba.setFlag(SpriteFlag.AutoDestroy, true)
+        galoomba.setBounceOnWall(true)
+        animation.runImageAnimation(
+        galoomba,
+        [img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . 4 4 4 4 . . . . . . 
+            . . . . . 4 4 4 4 4 4 . . . . . 
+            . . . . 4 4 4 4 4 4 4 4 . . . . 
+            . . . 4 4 4 4 4 4 4 4 4 4 . . . 
+            . . 4 f f 4 4 4 4 4 4 f f 4 . . 
+            . 4 4 4 1 f 4 4 4 4 f 1 4 4 4 . 
+            . 4 4 4 1 f f f f f f 1 4 4 4 . 
+            4 4 4 4 1 f 1 4 4 1 f 1 4 4 4 4 
+            4 4 4 4 1 1 1 4 4 1 1 1 4 4 4 4 
+            4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
+            . 4 4 4 4 7 7 7 7 7 7 4 4 4 4 . 
+            . . . . 7 7 7 7 7 7 7 7 . . . . 
+            . . e e 7 7 7 7 7 7 7 7 . . . . 
+            . e e e e e 7 7 7 7 7 e e . . . 
+            . e e e e e e 7 7 7 e e e . . . 
+            . . e e e e e . . e e e . . . . 
+            `,img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . 4 4 4 4 . . . . . . 
+            . . . . . 4 4 4 4 4 4 . . . . . 
+            . . . . 4 4 4 4 4 4 4 4 . . . . 
+            . . . 4 4 4 4 4 4 4 4 4 4 . . . 
+            . . 4 f f 4 4 4 4 4 4 f f 4 . . 
+            . 4 4 4 1 f 4 4 4 4 f 1 4 4 4 . 
+            . 4 4 4 1 f f f f f f 1 4 4 4 . 
+            4 4 4 4 1 f 1 4 4 1 f 1 4 4 4 4 
+            4 4 4 4 1 1 1 4 4 1 1 1 4 4 4 4 
+            4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
+            . 4 4 4 4 7 7 7 7 7 7 4 4 4 4 . 
+            . . . . 7 7 7 7 7 7 7 7 . . . . 
+            . . . . 7 7 7 7 7 7 7 7 e e . . 
+            . . . e e 7 7 7 7 7 e e e e e . 
+            . . . e e e 7 7 7 e e e e e e . 
+            . . . . e e e . . e e e e e . . 
+            `],
+        150,
+        true
+        )
+    }
 })
 game.onUpdateInterval(2000, function () {
-    red_koopa = sprites.create(assets.image`koopa`, SpriteKind.Enemy)
-    red_koopa.setPosition(160, randint(0, 115))
-    red_koopa.setVelocity(-150, 0)
-    red_koopa.setFlag(SpriteFlag.AutoDestroy, true)
-    animation.runImageAnimation(
-    red_koopa,
-    assets.animation`red koopa walk`,
-    100,
-    true
-    )
+    if (Game_State == 1) {
+        red_koopa = sprites.create(assets.image`koopa`, SpriteKind.Enemy)
+        red_koopa.setPosition(160, randint(0, 115))
+        red_koopa.setVelocity(-150, 0)
+        red_koopa.setFlag(SpriteFlag.AutoDestroy, true)
+        animation.runImageAnimation(
+        red_koopa,
+        assets.animation`red koopa walk`,
+        100,
+        true
+        )
+    }
 })
 game.onUpdateInterval(1000, function () {
     Timer += 1
@@ -619,16 +766,18 @@ game.onUpdateInterval(1000, function () {
 	
 })
 game.onUpdateInterval(1000, function () {
-    koopa = sprites.create(assets.image`koopa`, SpriteKind.Enemy)
-    koopa.setPosition(160, randint(0, 115))
-    koopa.setVelocity(-50, 0)
-    koopa.setFlag(SpriteFlag.AutoDestroy, true)
-    animation.runImageAnimation(
-    koopa,
-    assets.animation`koopa walk`,
-    200,
-    true
-    )
+    if (Game_State == 1) {
+        koopa = sprites.create(assets.image`koopa`, SpriteKind.Enemy)
+        koopa.setPosition(160, randint(0, 115))
+        koopa.setVelocity(-50, 0)
+        koopa.setFlag(SpriteFlag.AutoDestroy, true)
+        animation.runImageAnimation(
+        koopa,
+        assets.animation`koopa walk`,
+        200,
+        true
+        )
+    }
 })
 forever(function () {
     if (EX_Health < 1999) {
@@ -679,18 +828,43 @@ forever(function () {
     }
 })
 forever(function () {
-    pause(5000)
-    blue_koopa = sprites.create(assets.image`koopa`, SpriteKind.blue_koopa)
-    blue_koopa_health = 3
-    blue_koopa.setPosition(160, randint(0, 115))
-    blue_koopa.setFlag(SpriteFlag.AutoDestroy, true)
-    blue_koopa.follow(mario, 150)
-    animation.runImageAnimation(
-    blue_koopa,
-    assets.animation`blue koopa walk`,
-    200,
-    true
-    )
+    if (Mickey_State == 0) {
+        pause(5000)
+        Mickey_State = 1
+    }
+})
+forever(function () {
+    if (Game_State == 1) {
+        mario = sprites.create(assets.image`mario`, SpriteKind.Player)
+        controller.moveSprite(mario, 200, 200)
+        mario.setStayInScreen(true)
+        info.setLife(3)
+        animation.runImageAnimation(
+        mario,
+        assets.animation`mario blink`,
+        500,
+        true
+        )
+        Mickey_State = 0
+        Luigi_State = 0
+        pause(10000000000000000)
+    }
+})
+forever(function () {
+    if (Game_State == 1) {
+        pause(5000)
+        blue_koopa = sprites.create(assets.image`koopa`, SpriteKind.blue_koopa)
+        blue_koopa_health = 3
+        blue_koopa.setPosition(160, randint(0, 115))
+        blue_koopa.setFlag(SpriteFlag.AutoDestroy, true)
+        blue_koopa.follow(mario, 150)
+        animation.runImageAnimation(
+        blue_koopa,
+        assets.animation`blue koopa walk`,
+        200,
+        true
+        )
+    }
 })
 forever(function () {
     scroller.scrollBackgroundWithSpeed(-112.5, 0)
@@ -705,6 +879,12 @@ forever(function () {
         true
         )
         pause(2000)
+    }
+})
+forever(function () {
+    if (Disable7 == 1) {
+        sprites.destroyAllSpritesOfKind(SpriteKind.Bob_omb)
+        Bobomb_Health = 0
     }
 })
 forever(function () {
@@ -765,21 +945,58 @@ forever(function () {
 })
 forever(function () {
     if (Disable2 == 0) {
-        pauseUntil(() => Luigi_State == 1)
-        enemy_bullet = sprites.createProjectileFromSprite(assets.image`mickey bullet right`, minniemouse, 150, 0)
-        enemy_bullet.setKind(SpriteKind.MickeyBullet)
-        enemy_bullet1 = sprites.createProjectileFromSprite(assets.image`mickey bullet left`, minniemouse, -150, 0)
-        enemy_bullet1.setKind(SpriteKind.MickeyBullet)
-        enemy_bullet2 = sprites.createProjectileFromSprite(assets.image`mickey bullet down`, minniemouse, 0, 150)
-        enemy_bullet2.setKind(SpriteKind.MickeyBullet)
-        enemy_bullet3 = sprites.createProjectileFromSprite(assets.image`mickey bullet up`, minniemouse, 0, -150)
-        enemy_bullet3.setKind(SpriteKind.MickeyBullet)
-        if (info.score() >= 60) {
-            pause(187.5)
+        if (info.score() >= 40) {
+            pauseUntil(() => Luigi_State == 1)
+            enemy_bullet = sprites.createProjectileFromSprite(assets.image`mickey bullet right`, minniemouse, 150, 0)
+            enemy_bullet.setKind(SpriteKind.MickeyBullet)
+            enemy_bullet1 = sprites.createProjectileFromSprite(assets.image`mickey bullet left`, minniemouse, -150, 0)
+            enemy_bullet1.setKind(SpriteKind.MickeyBullet)
+            enemy_bullet2 = sprites.createProjectileFromSprite(assets.image`mickey bullet down`, minniemouse, 0, 150)
+            enemy_bullet2.setKind(SpriteKind.MickeyBullet)
+            enemy_bullet3 = sprites.createProjectileFromSprite(assets.image`mickey bullet up`, minniemouse, 0, -150)
+            enemy_bullet3.setKind(SpriteKind.MickeyBullet)
+            if (info.score() >= 60) {
+                pause(187.5)
+            }
+            if (info.score() < 60) {
+                pause(375)
+            }
         }
-        if (info.score() < 60) {
-            pause(375)
+    }
+})
+forever(function () {
+    if (Disable2 == 0) {
+        if (Game_State == 1) {
+            if (info.score() < 10) {
+                pause(1000)
+            }
+            if (info.score() >= 10) {
+                pause(250)
+            }
+            enemy_bullet = sprites.createProjectileFromSprite(assets.image`mickey bullet right`, Mickey_mouse, 125, 0)
+            enemy_bullet.setKind(SpriteKind.MickeyBullet)
+            enemy_bullet1 = sprites.createProjectileFromSprite(assets.image`mickey bullet left`, Mickey_mouse, -100, 0)
+            enemy_bullet1.setKind(SpriteKind.MickeyBullet)
+            enemy_bullet2 = sprites.createProjectileFromSprite(assets.image`mickey bullet down`, Mickey_mouse, 0, 100)
+            enemy_bullet2.setKind(SpriteKind.MickeyBullet)
+            enemy_bullet3 = sprites.createProjectileFromSprite(assets.image`mickey bullet up`, Mickey_mouse, 0, -100)
+            enemy_bullet3.setKind(SpriteKind.MickeyBullet)
         }
+    }
+})
+forever(function () {
+    if (Disable5 == 1) {
+        sprites.destroyAllSpritesOfKind(SpriteKind.Enemy2)
+        sprites.destroyAllSpritesOfKind(SpriteKind.Enemy3)
+        sprites.destroyAllSpritesOfKind(SpriteKind.ParagoombaProjectile)
+        Paragoomba_Spawn_Decider = 0
+    }
+})
+forever(function () {
+    if (Bobomb_Health <= 0) {
+        sprites.destroy(Bobomb, effects.fire, 2000)
+        Fuse = 0
+        Bobomb_Anger = 0
     }
 })
 forever(function () {
@@ -789,44 +1006,21 @@ forever(function () {
     }
 })
 forever(function () {
-    if (Bobomb_Health <= 0) {
-        sprites.destroy(Bobomb, effects.fire, 2000)
-        Fuse = 0
-        Bobomb_Anger = 0
+    if (Game_State == 1) {
+        pauseUntil(() => Bobomb_Health <= 0)
+        pause(5000)
+        Bobomb_Health = 10
+        Bobomb = sprites.create(assets.image`Bob-omb`, SpriteKind.Bob_omb)
+        Bobomb.setPosition(160, randint(0, 115))
+        Bobomb.follow(mario, 150)
+        pause(500)
+        Fuse = 1
     }
-    pause(2000)
-})
-forever(function () {
-    if (Disable2 == 0) {
-        if (info.score() < 10) {
-            pause(1000)
-        }
-        if (info.score() >= 10) {
-            pause(250)
-        }
-        enemy_bullet = sprites.createProjectileFromSprite(assets.image`mickey bullet right`, Mickey_mouse, 125, 0)
-        enemy_bullet.setKind(SpriteKind.MickeyBullet)
-        enemy_bullet1 = sprites.createProjectileFromSprite(assets.image`mickey bullet left`, Mickey_mouse, -100, 0)
-        enemy_bullet1.setKind(SpriteKind.MickeyBullet)
-        enemy_bullet2 = sprites.createProjectileFromSprite(assets.image`mickey bullet down`, Mickey_mouse, 0, 100)
-        enemy_bullet2.setKind(SpriteKind.MickeyBullet)
-        enemy_bullet3 = sprites.createProjectileFromSprite(assets.image`mickey bullet up`, Mickey_mouse, 0, -100)
-        enemy_bullet3.setKind(SpriteKind.MickeyBullet)
-    }
-})
-forever(function () {
-    pauseUntil(() => Bobomb_Health <= 0)
-    pause(5000)
-    Bobomb_Health = 10
-    Bobomb = sprites.create(assets.image`Bob-omb`, SpriteKind.Bob_omb)
-    Bobomb.setPosition(160, randint(0, 115))
-    Bobomb.follow(mario, 150)
-    pause(500)
-    Fuse = 1
 })
 forever(function () {
     if (Fuse >= 6) {
         Bobomb.setKind(SpriteKind.Explosion)
+        scene.cameraShake(12, 1000)
         animation.runImageAnimation(
         Bobomb,
         [img`
@@ -1374,14 +1568,6 @@ forever(function () {
     pause(500)
 })
 forever(function () {
-    if (Disable5 == 1) {
-        sprites.destroyAllSpritesOfKind(SpriteKind.Enemy2)
-        sprites.destroyAllSpritesOfKind(SpriteKind.Enemy3)
-        sprites.destroyAllSpritesOfKind(SpriteKind.ParagoombaProjectile)
-        Paragoomba_Spawn_Decider = 0
-    }
-})
-forever(function () {
     Disable = 0
     Disable1 = 0
     Disable2 = 0
@@ -1389,6 +1575,7 @@ forever(function () {
     Disable4 = 0
     Disable5 = 0
     Disable6 = 0
+    Disable7 = 0
     pause(100000000000000000000)
 })
 forever(function () {
@@ -1396,11 +1583,6 @@ forever(function () {
         sprites.destroyAllSpritesOfKind(SpriteKind.Mickey)
         sprites.destroyAllSpritesOfKind(SpriteKind.Minnie)
         sprites.destroyAllSpritesOfKind(SpriteKind.MickeyBullet)
-    }
-})
-forever(function () {
-    if (Disable == 1) {
-        sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
     }
 })
 forever(function () {
@@ -1469,14 +1651,30 @@ forever(function () {
     }
 })
 forever(function () {
+    if (Disable == 1) {
+        sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+    }
+})
+forever(function () {
     if (Disable4 == 1) {
         info.setScore(0)
+    }
+})
+forever(function () {
+    if (Game_State == 1) {
+        if (Mickey_State == 1) {
+            Mickey_mouse = sprites.create(assets.image`why are there two`, SpriteKind.Mickey)
+            Mickey_mouse.setPosition(0, randint(0, 115))
+            Mickey_mouse.setVelocity(50, 0)
+            pause(10000)
+        }
     }
 })
 forever(function () {
     if (Anger_Fuse >= 3) {
         Bobomb.unfollow()
         Bobomb.setKind(SpriteKind.Explosion)
+        scene.cameraShake(12, 1000)
         animation.runImageAnimation(
         Bobomb,
         [img`
@@ -2030,8 +2228,10 @@ forever(function () {
     }
 })
 forever(function () {
-    pause(4500)
-    Paragoomba_Spawn_Decider = randint(1, 2)
+    if (Game_State == 1) {
+        pause(4500)
+        Paragoomba_Spawn_Decider = randint(1, 2)
+    }
 })
 forever(function () {
     if (Paragoomba_Health <= 0) {
@@ -2157,7 +2357,6 @@ forever(function () {
 })
 forever(function () {
     if (controller.B.isPressed()) {
-        pause(3500)
         Luigi_State = 1
     }
 })
@@ -2168,6 +2367,32 @@ forever(function () {
         projectile = sprites.createProjectileFromSprite(assets.image`mario bullet`, luigi_bullet_2, 50, 50)
         projectile = sprites.createProjectileFromSprite(assets.image`mario bullet`, luigi_bullet_3, 50, 50)
         projectile = sprites.createProjectileFromSprite(assets.image`mario bullet`, luigi_bullet_4, 50, 50)
+    }
+})
+forever(function () {
+    if (Luigi_State == 1) {
+        luigi_bullet = sprites.createProjectileFromSprite(assets.image`luigi bullet up`, luigi, 100, -100)
+        luigi_bullet.setKind(SpriteKind.luigi_bullet)
+        luigi_bullet_1 = sprites.createProjectileFromSprite(assets.image`luigi bullet`, luigi, 100, 0)
+        luigi_bullet_1.setKind(SpriteKind.luigi_bullet)
+        luigi_bullet_2 = sprites.createProjectileFromSprite(assets.image`luigi bullet down`, luigi, 100, 100)
+        luigi_bullet_2.setKind(SpriteKind.luigi_bullet)
+        if (info.score() >= 1.5) {
+            luigi_bullet_3 = sprites.createProjectileFromSprite(assets.image`luigi bullet down`, luigi, 100, 50)
+            luigi_bullet_3.setKind(SpriteKind.luigi_bullet)
+            luigi_bullet_4 = sprites.createProjectileFromSprite(assets.image`luigi bullet up`, luigi, 100, -50)
+            luigi_bullet.setKind(SpriteKind.luigi_bullet)
+        }
+        if (info.score() >= 4.5) {
+            if (info.score() < 18) {
+                pause(1000)
+            }
+        } else {
+            pause(2000)
+        }
+        if (info.score() >= 18) {
+            pause(375)
+        }
     }
 })
 forever(function () {
@@ -2223,29 +2448,9 @@ forever(function () {
     }
 })
 forever(function () {
-    if (Luigi_State == 1) {
-        luigi_bullet = sprites.createProjectileFromSprite(assets.image`luigi bullet up`, luigi, 100, -100)
-        luigi_bullet.setKind(SpriteKind.luigi_bullet)
-        luigi_bullet_1 = sprites.createProjectileFromSprite(assets.image`luigi bullet`, luigi, 100, 0)
-        luigi_bullet_1.setKind(SpriteKind.luigi_bullet)
-        luigi_bullet_2 = sprites.createProjectileFromSprite(assets.image`luigi bullet down`, luigi, 100, 100)
-        luigi_bullet_2.setKind(SpriteKind.luigi_bullet)
-        if (info.score() >= 1.5) {
-            luigi_bullet_3 = sprites.createProjectileFromSprite(assets.image`luigi bullet down`, luigi, 100, 50)
-            luigi_bullet_3.setKind(SpriteKind.luigi_bullet)
-            luigi_bullet_4 = sprites.createProjectileFromSprite(assets.image`luigi bullet up`, luigi, 100, -50)
-            luigi_bullet.setKind(SpriteKind.luigi_bullet)
-        }
-        if (info.score() >= 4.5) {
-            if (info.score() < 18) {
-                pause(1000)
-            }
-        } else {
-            pause(2000)
-        }
-        if (info.score() >= 18) {
-            pause(375)
-        }
+    if (big_bullet_pierce < -4) {
+        sprites.destroy(big_bullet, effects.fire, 500)
+        big_bullet_pierce = 0
     }
 })
 forever(function () {
@@ -2308,14 +2513,16 @@ forever(function () {
     pause(500)
 })
 game.onUpdateInterval(500, function () {
-    goomba = sprites.create(assets.image`goomba`, SpriteKind.Enemy)
-    goomba.setPosition(160, randint(0, 115))
-    goomba.setVelocity(-100, 0)
-    goomba.setFlag(SpriteFlag.AutoDestroy, true)
-    animation.runImageAnimation(
-    goomba,
-    assets.animation`goomba walk`,
-    150,
-    true
-    )
+    if (Game_State == 1) {
+        goomba = sprites.create(assets.image`goomba`, SpriteKind.Enemy)
+        goomba.setPosition(160, randint(0, 115))
+        goomba.setVelocity(-100, 0)
+        goomba.setFlag(SpriteFlag.AutoDestroy, true)
+        animation.runImageAnimation(
+        goomba,
+        assets.animation`goomba walk`,
+        150,
+        true
+        )
+    }
 })
